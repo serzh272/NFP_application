@@ -7,7 +7,6 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocal
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -20,6 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
@@ -32,7 +32,7 @@ import ru.serzh272.nfp.ui.theme.NFPTheme
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    val mainViewModel by viewModels<MainViewModel>()
+    private val mainViewModel by viewModels<MainViewModel>()
 
     private val navigationItems = listOf(
         RootNavigation.Norms,
@@ -63,13 +63,7 @@ class MainActivity : ComponentActivity() {
                         BottomNavigationItem(
                             selected = if (LocalInspectionMode.current) navigationItems.indexOf(screen) == 0 else currentDestination?.hierarchy?.any { it.route == screen.route } == true,
                             onClick = {
-                                navController.navigate(screen.route) {
-                                    popUpTo(navController.graph.findStartDestination().id) {
-                                        saveState = true
-                                    }
-                                    launchSingleTop = true
-                                    restoreState = true
-                                }
+                                handleTopLevelNavigation(navController, screen)
                             },
                             icon = {
                                 Icon(
@@ -88,7 +82,6 @@ class MainActivity : ComponentActivity() {
                                 id = R.color.silver_sand
                             )
                         )
-
                     }
                 }
             }
@@ -97,8 +90,14 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    fun handleTopLevelNavigation() {
-        TODO("Not yet implemented")
+    fun handleTopLevelNavigation(navController:NavHostController, screen:RootNavigation) {
+        navController.navigate(screen.route) {
+            popUpTo(navController.graph.findStartDestination().id) {
+                saveState = true
+            }
+            launchSingleTop = true
+            restoreState = true
+        }
     }
 
     @Preview(showBackground = true)

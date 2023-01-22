@@ -4,4 +4,10 @@
     <string name="results">Результаты</string>
     <string name="profile">Профиль</string>
     <string name="help">Помощь</string>
+    <string name="strength">Сила</string>
+    <string name="speed">Быстрота</string>
+    <string name="endurance">Выносливость</string>
+    <string name="agility">Ловкость</string>
+    <string name="military_skills">Военно-прикладные навыки</string>
+    <string name="search">Поиск</string>
 </resources>
