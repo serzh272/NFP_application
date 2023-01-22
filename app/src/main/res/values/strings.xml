@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name" translatable="false">NFP</string>
+    <string name="norms">Norms</string>
+    <string name="results">Results</string>
+    <string name="profile">Profile</string>
+    <string name="help">Help</string>
+</resources>
