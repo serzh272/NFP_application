@@ -90,7 +90,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    fun handleTopLevelNavigation(navController:NavHostController, screen:RootNavigation) {
+    private fun handleTopLevelNavigation(navController:NavHostController, screen:RootNavigation) {
         navController.navigate(screen.route) {
             popUpTo(navController.graph.findStartDestination().id) {
                 saveState = true

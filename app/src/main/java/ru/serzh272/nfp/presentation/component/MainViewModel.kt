@@ -6,10 +6,14 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import ru.serzh272.nfp.domain.repository.IMainRepository
 import javax.inject.Inject
 
+interface IMainViewModel {
+
+}
+
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    val mainRepository: IMainRepository,
-    val savedStateHandle: SavedStateHandle,
+    private val mainRepository: IMainRepository,
+    private val savedStateHandle: SavedStateHandle,
 ) : ViewModel(), IMainViewModel {
 
 

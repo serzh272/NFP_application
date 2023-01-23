@@ -10,4 +10,9 @@
     <string name="agility">Ловкость</string>
     <string name="military_skills">Военно-прикладные навыки</string>
     <string name="search">Поиск</string>
+    <string name="filter">Фильтр</string>
+    <string name="clear">Очистить</string>
+    <string name="apply">Применить</string>
+    <string name="exercise">Упражнение%s</string>
+    <string name="add_to_complex">Добавить в комплекс</string>
 </resources>
