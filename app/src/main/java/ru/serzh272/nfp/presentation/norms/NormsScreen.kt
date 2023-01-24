@@ -29,8 +29,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.flowlayout.FlowRow
 import ru.serzh272.nfp.R
 import ru.serzh272.nfp.core.constants.EMPTY_STRING
-import ru.serzh272.nfp.presentation.model.DataHolder
-import ru.serzh272.nfp.presentation.model.Exercise
+import ru.serzh272.nfp.domain.model.DataHolder
+import ru.serzh272.nfp.domain.model.Exercise
 import ru.serzh272.nfp.ui.theme.NFPTheme
 
 @Composable
@@ -140,7 +140,7 @@ fun NormsScreenContent(modifier: Modifier = Modifier, uiState: NormsScreenUiStat
                                 )
                                 Text(
                                     modifier = Modifier.padding(horizontal = 4.dp),
-                                    text = exercise.description,
+                                    text = exercise.name,
                                     fontSize = 12.sp,
                                     textAlign = TextAlign.Center,
                                     overflow = TextOverflow.Ellipsis
