@@ -29,8 +29,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.flowlayout.FlowRow
 import ru.serzh272.nfp.R
 import ru.serzh272.nfp.core.constants.EMPTY_STRING
-import ru.serzh272.nfp.domain.model.DataHolder
-import ru.serzh272.nfp.domain.model.Exercise
+import ru.serzh272.nfp.data.local.database.entity.ExerciseEntity
+import ru.serzh272.nfp.domain.DomainDataHolder
 import ru.serzh272.nfp.ui.theme.NFPTheme
 
 @Composable
@@ -108,7 +108,7 @@ fun NormsScreenContent(modifier: Modifier = Modifier, uiState: NormsScreenUiStat
             LazyVerticalGrid(
                 state = lazyGridState,
                 columns = GridCells.Adaptive(96.dp),
-                contentPadding = PaddingValues(start = 16.dp, top = 16.dp, end = 16.dp),
+                contentPadding = PaddingValues(16.dp),
                 horizontalArrangement = Arrangement.spacedBy(gridSpacing),
                 verticalArrangement = Arrangement.spacedBy(gridSpacing),
                 content = {
@@ -134,7 +134,7 @@ fun NormsScreenContent(modifier: Modifier = Modifier, uiState: NormsScreenUiStat
                                         .height(52.dp)
                                         .fillMaxWidth()
                                         .padding(start = 4.dp, top = 4.dp, end = 4.dp),
-                                    imageVector = ImageVector.vectorResource(id = exercise.iconRes),
+                                    imageVector = ImageVector.vectorResource(id = exercise.iconRes ?: R.drawable.ic_image_placeholder),
                                     contentDescription = "",
                                     tint = MaterialTheme.colors.primary
                                 )
@@ -143,7 +143,8 @@ fun NormsScreenContent(modifier: Modifier = Modifier, uiState: NormsScreenUiStat
                                     text = exercise.name,
                                     fontSize = 12.sp,
                                     textAlign = TextAlign.Center,
-                                    overflow = TextOverflow.Ellipsis
+                                    overflow = TextOverflow.Ellipsis,
+                                    maxLines = 4
                                 )
                             }
                         }
@@ -168,7 +169,7 @@ fun NormsScreenContent(modifier: Modifier = Modifier, uiState: NormsScreenUiStat
                     .padding(8.dp)
             ) {
                 Text(modifier = Modifier.fillMaxWidth(),text = stringResource(id = R.string.filter), textAlign = TextAlign.Center)
-                Exercise.ExerciseType.values().forEach { type ->
+                ExerciseEntity.ExerciseType.availableValues.forEach { type ->
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Checkbox(checked = uiState.filter.contains(type), onCheckedChange = { checked ->
                             command(NormsViewModel.NormsScreenCommand.ChangeUiState(uiState.copy(filter = if (checked) uiState.filter + type else uiState.filter - type)))
@@ -203,7 +204,7 @@ fun NormsScreenPreview() {
             modifier = Modifier
                 .fillMaxSize(),
             gridSpacing = 8.dp,
-            uiState = NormsScreenUiState(exercises = DataHolder.exercises, selectedExercises = DataHolder.exercises.take(2).toSet()),
+            uiState = NormsScreenUiState(exercises = DomainDataHolder.exercises, selectedExercises = DomainDataHolder.exercises.take(2).toSet()),
             command = {},
         )
     }

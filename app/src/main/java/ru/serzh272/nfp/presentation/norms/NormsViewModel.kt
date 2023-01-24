@@ -11,18 +11,18 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import ru.serzh272.nfp.domain.model.Exercise
-import ru.serzh272.nfp.domain.repository.INormsRepository
+import ru.serzh272.nfp.domain.usecase.GetExercisesUseCase
 import javax.inject.Inject
 
 @HiltViewModel
 class NormsViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
-    normsRepository: INormsRepository,
+    getExercisesUseCase: GetExercisesUseCase,
 ) : ViewModel() {
 
     private var allExercises: List<Exercise> = listOf()
 
-    private val exercisesFlow: Flow<List<Exercise>> = normsRepository.getExercises()
+    private val exercisesFlow: Flow<List<Exercise>> = getExercisesUseCase()
 
     private val _normsUiState: MutableStateFlow<NormsScreenUiState> = MutableStateFlow(NormsScreenUiState())
     val normsUiState: StateFlow<NormsScreenUiState> = _normsUiState
