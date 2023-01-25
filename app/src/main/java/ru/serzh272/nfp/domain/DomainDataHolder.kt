@@ -32,5 +32,9 @@ object DomainDataHolder {
         Exam(id = 3, date = Date(), exercises = exercises.subList(7, 11).mapIndexed { index, ex -> ExerciseWithResult(ex, ExerciseWithResult.ExerciseResult.Count(5*index)) }.toSet()),
         Exam(id = 4, date = Date(), exercises = exercises.subList(5, 8).mapIndexed { index, ex -> ExerciseWithResult(ex, ExerciseWithResult.ExerciseResult.Count(8*index)) }.toSet()),
         Exam(id = 5, date = Date(), exercises = exercises.subList(2, 5).mapIndexed { index, ex -> ExerciseWithResult(ex, ExerciseWithResult.ExerciseResult.Count(16*index)) }.toSet()),
+        Exam(id = 6, date = Date(), exercises = exercises.subList(2, 5).mapIndexed { index, ex -> ExerciseWithResult(ex, ExerciseWithResult.ExerciseResult.Count(90*index)) }.toSet()),
+        Exam(id = 7, date = Date(), exercises = exercises.subList(2, 5).mapIndexed { index, ex -> ExerciseWithResult(ex, ExerciseWithResult.ExerciseResult.Count(16*index)) }.toSet()),
+        Exam(id = 8, date = Date(), exercises = exercises.subList(2, 5).mapIndexed { index, ex -> ExerciseWithResult(ex, ExerciseWithResult.ExerciseResult.Count(16*index)) }.toSet()),
+        Exam(id = 9, date = Date(), exercises = exercises.subList(2, 5).mapIndexed { index, ex -> ExerciseWithResult(ex, ExerciseWithResult.ExerciseResult.Count(16*index)) }.toSet()),
     )
 }
