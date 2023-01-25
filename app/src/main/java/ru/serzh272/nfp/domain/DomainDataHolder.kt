@@ -1,7 +1,10 @@
 package ru.serzh272.nfp.domain
 
 import ru.serzh272.nfp.data.local.database.entity.ExerciseEntity
+import ru.serzh272.nfp.domain.model.Exam
 import ru.serzh272.nfp.domain.model.Exercise
+import ru.serzh272.nfp.domain.model.ExerciseWithResult
+import java.util.*
 
 object DomainDataHolder {
     val exercises: List<Exercise> = listOf(
@@ -21,5 +24,13 @@ object DomainDataHolder {
         Exercise(id = 15, name = "15. Прыжок ноги врозь через козла в длину.", exerciseType = ExerciseEntity.ExerciseType.AGILITY),
         Exercise(id = 16, name = "16. Прыжок ноги врозь через коня в длину.", exerciseType = ExerciseEntity.ExerciseType.AGILITY),
         Exercise(id = 17, name = "17. Кувырок вперед.", exerciseType = ExerciseEntity.ExerciseType.AGILITY),
+    )
+
+    val exams: List<Exam> = listOf(
+        Exam(id = 1, date = Date(), exercises = exercises.take(4).mapIndexed { index, ex -> ExerciseWithResult(ex, ExerciseWithResult.ExerciseResult.Count(4*index)) }.toSet()),
+        Exam(id = 2, date = Date(), exercises = exercises.subList(4, 6).mapIndexed { index, ex -> ExerciseWithResult(ex, ExerciseWithResult.ExerciseResult.Count(3*index)) }.toSet()),
+        Exam(id = 3, date = Date(), exercises = exercises.subList(7, 11).mapIndexed { index, ex -> ExerciseWithResult(ex, ExerciseWithResult.ExerciseResult.Count(5*index)) }.toSet()),
+        Exam(id = 4, date = Date(), exercises = exercises.subList(5, 8).mapIndexed { index, ex -> ExerciseWithResult(ex, ExerciseWithResult.ExerciseResult.Count(8*index)) }.toSet()),
+        Exam(id = 5, date = Date(), exercises = exercises.subList(2, 5).mapIndexed { index, ex -> ExerciseWithResult(ex, ExerciseWithResult.ExerciseResult.Count(16*index)) }.toSet()),
     )
 }

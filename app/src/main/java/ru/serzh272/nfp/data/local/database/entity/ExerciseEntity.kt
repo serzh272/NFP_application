@@ -53,7 +53,7 @@ data class ExerciseEntity(
     enum class ExerciseUnit{
         COUNT,
         TIME,
-        LENGTH,
+        DISTANCE,
         MARK,
     }
 }

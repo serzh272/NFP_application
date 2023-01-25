@@ -9,6 +9,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import ru.serzh272.nfp.presentation.norms.NormsScreen
+import ru.serzh272.nfp.presentation.results.ResultsScreen
 
 @Composable
 fun RootNavHost(modifier: Modifier = Modifier, navController: NavHostController, startDestination: String = "norms"){
@@ -17,7 +18,7 @@ fun RootNavHost(modifier: Modifier = Modifier, navController: NavHostController,
             NormsScreen(modifier = Modifier.fillMaxSize(), hiltViewModel())
         }
         composable("results"){
-            Text(text = "results")
+            ResultsScreen(modifier = Modifier.fillMaxSize(), hiltViewModel())
         }
         composable("profile"){
             Text(text = "profile")
