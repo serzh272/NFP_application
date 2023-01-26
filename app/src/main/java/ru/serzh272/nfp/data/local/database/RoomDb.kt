@@ -15,6 +15,13 @@ import ru.serzh272.nfp.data.local.database.entity.*
         ExamExerciseXref::class,
         PointsEntity::class,
         WeightConstraintEntity::class,
+        AgeGroupEntity::class,
+        CategoryEntity::class,
+        GroupEntity::class,
+        MarkByPointsXref::class,
+        MarkEntity::class,
+        QualificationByPointsXref::class,
+        UserEntity::class,
     ],
     version = RoomDb.DATABASE_VERSION
 )
