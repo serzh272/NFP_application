@@ -10,15 +10,16 @@ import androidx.room.*
     ]
 )
 data class PointsEntity(
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     val id: Long,
     @ColumnInfo(name = "exercise_id")
     val exerciseId: Long,
     val gender: Gender = Gender.MALE,
     val result: Int,
     val points: Int,
-    ){
-    enum class Gender{
+) {
+
+    enum class Gender {
         MALE,
         FEMALE,
     }

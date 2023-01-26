@@ -11,5 +11,5 @@ import javax.inject.Inject
 class NormsRepository @Inject constructor(
     private val db:RoomDb,
 ): INormsRepository {
-    override fun getExercises(): Flow<List<Exercise>> = db.exersiseDao.getAllExercises().map {exercises -> exercises.map { it.toExercise() } }
+    override fun getExercises(): Flow<List<Exercise>> = db.exerciseDao.getAllExercises().map { exercises -> exercises.map { it.toExercise() } }
 }

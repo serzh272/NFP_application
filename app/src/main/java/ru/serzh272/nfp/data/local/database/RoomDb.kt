@@ -5,6 +5,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import ru.serzh272.nfp.data.local.database.dao.ExamDao
 import ru.serzh272.nfp.data.local.database.dao.ExerciseDao
+import ru.serzh272.nfp.data.local.database.dao.PointsDao
 import ru.serzh272.nfp.data.local.database.entity.*
 
 @Database(
@@ -25,6 +26,7 @@ abstract class RoomDb : RoomDatabase() {
         const val DATABASE_VERSION = 1
     }
 
-    abstract val exersiseDao: ExerciseDao
+    abstract val exerciseDao: ExerciseDao
     abstract val examDao: ExamDao
+    abstract val pointsDao: PointsDao
 }

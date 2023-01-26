@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "a65b97a8224ef014b9ad2164e968d9d7",
+    "identityHash": "a6ad1ce40562a3a730948c7e07abc29a",
     "entities": [
       {
         "tableName": "exercise",
@@ -86,7 +86,7 @@
       },
       {
         "tableName": "exam",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `exam_date` INTEGER NOT NULL, `description` TEXT, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `exam_date` INTEGER NOT NULL, `description` TEXT)",
         "fields": [
           {
             "fieldPath": "id",
@@ -108,7 +108,7 @@
           }
         ],
         "primaryKey": {
-          "autoGenerate": false,
+          "autoGenerate": true,
           "columnNames": [
             "id"
           ]
@@ -201,7 +201,7 @@
       },
       {
         "tableName": "points",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `exercise_id` INTEGER NOT NULL, `gender` TEXT NOT NULL, `result` INTEGER NOT NULL, `points` INTEGER NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`exercise_id`) REFERENCES `exercise`(`id`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `exercise_id` INTEGER NOT NULL, `gender` TEXT NOT NULL, `result` INTEGER NOT NULL, `points` INTEGER NOT NULL, FOREIGN KEY(`exercise_id`) REFERENCES `exercise`(`id`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
         "fields": [
           {
             "fieldPath": "id",
@@ -235,7 +235,7 @@
           }
         ],
         "primaryKey": {
-          "autoGenerate": false,
+          "autoGenerate": true,
           "columnNames": [
             "id"
           ]
@@ -332,7 +332,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a65b97a8224ef014b9ad2164e968d9d7')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a6ad1ce40562a3a730948c7e07abc29a')"
     ]
   }
 }

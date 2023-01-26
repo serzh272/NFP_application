@@ -11,7 +11,7 @@ import java.util.*
     indices = [Index("id", unique = true)]
 )
 data class ExamEntity(
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     val id: Long,
     @ColumnInfo(name = "exam_date")
     val examDate: Date,
