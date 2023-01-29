@@ -18,6 +18,7 @@ class DatabaseModule {
     fun provideRoomDatabase(@ApplicationContext context: Context): RoomDb {
         return Room.databaseBuilder(context, RoomDb::class.java, RoomDb.DATABASE_NAME)
             .addCallback(RoomDatabaseCallback())
+            .createFromAsset("nfp_prepopulated.db")
             .build()
     }
 }

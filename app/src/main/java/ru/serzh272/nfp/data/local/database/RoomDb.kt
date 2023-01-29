@@ -22,6 +22,8 @@ import ru.serzh272.nfp.data.local.database.entity.*
         MarkEntity::class,
         QualificationByPointsXref::class,
         UserEntity::class,
+        MinPointsEntity::class,
+        UserCategoryEntity::class
     ],
     version = RoomDb.DATABASE_VERSION
 )

@@ -6,20 +6,18 @@ import androidx.room.*
     tableName = "group",
     indices = [
         Index("id", unique = true),
-        Index("age_group_id", unique = false),
+        Index("category_id", "min_points_id", unique = true),
     ],
     foreignKeys = [
-        ForeignKey(AgeGroupEntity::class, parentColumns = ["id"], childColumns = ["age_group_id"])
+        ForeignKey(CategoryEntity::class, parentColumns = ["id"], childColumns = ["category_id"]),
+        ForeignKey(MinPointsEntity::class, parentColumns = ["id"], childColumns = ["min_points_id"])
     ]
 )
 data class GroupEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Long,
-    @ColumnInfo(name = "age_group_id")
-    val ageGroupId: Long,
-    @ColumnInfo(name = "group_name")
-    val group_name: String,
-    @ColumnInfo(name = "min_points_by_ex")
-    val minPointsByEx: Int,
-
-    )
+    @ColumnInfo(name = "category_id", defaultValue = "NULL")
+    val categoryId: Long? = null,
+    @ColumnInfo(name = "min_points_id")
+    val minPointsId: Long,
+)

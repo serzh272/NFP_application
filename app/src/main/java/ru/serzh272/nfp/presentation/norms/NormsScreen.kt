@@ -30,7 +30,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.flowlayout.FlowRow
 import ru.serzh272.nfp.R
 import ru.serzh272.nfp.core.constants.EMPTY_STRING
-import ru.serzh272.nfp.data.local.database.entity.ExerciseEntity
+import ru.serzh272.nfp.data.local.database.entity.enums.ExerciseType
 import ru.serzh272.nfp.domain.DomainDataHolder
 import ru.serzh272.nfp.domain.model.Exercise
 import ru.serzh272.nfp.ui.theme.NFPTheme
@@ -152,7 +152,7 @@ fun NormsScreenContent(modifier: Modifier = Modifier, uiState: NormsScreenUiStat
                     .padding(8.dp)
             ) {
                 Text(modifier = Modifier.fillMaxWidth(), text = stringResource(id = R.string.filter), textAlign = TextAlign.Center)
-                ExerciseEntity.ExerciseType.availableValues.forEach { type ->
+                ExerciseType.availableValues.forEach { type ->
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Checkbox(checked = uiState.filter.contains(type), onCheckedChange = { checked ->
                             command(NormsViewModel.NormsScreenCommand.ChangeUiState(uiState.copy(filter = if (checked) uiState.filter + type else uiState.filter - type)))

@@ -1,7 +1,7 @@
 package ru.serzh272.nfp.data.local.database.entity
 
 import androidx.room.*
-import ru.serzh272.nfp.data.local.database.entity.PointsEntity.Gender
+import ru.serzh272.nfp.data.local.database.entity.enums.Gender
 import java.util.*
 
 @Entity(

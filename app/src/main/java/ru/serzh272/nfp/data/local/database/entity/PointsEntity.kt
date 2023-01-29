@@ -1,6 +1,7 @@
 package ru.serzh272.nfp.data.local.database.entity
 
 import androidx.room.*
+import ru.serzh272.nfp.data.local.database.entity.enums.Gender
 
 @Entity(
     tableName = "points",
@@ -17,10 +18,4 @@ data class PointsEntity(
     val gender: Gender = Gender.MALE,
     val result: Int,
     val points: Int,
-) {
-
-    enum class Gender {
-        MALE,
-        FEMALE,
-    }
-}
+)
