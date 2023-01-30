@@ -24,7 +24,7 @@ data class ExerciseEntity(
     @ColumnInfo(name = "only_military", defaultValue = "0")
     val onlyMilitary: Boolean = false,
     @DrawableRes val icon: Int? = null,
-    @ColumnInfo(defaultValue = "count")
+    @ColumnInfo(defaultValue = "COUNT")
     val unit: ExerciseUnit = ExerciseUnit.COUNT,
     val created: Date = Date(),
     val updated: Date? = null

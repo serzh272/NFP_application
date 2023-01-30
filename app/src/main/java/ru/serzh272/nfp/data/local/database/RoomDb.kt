@@ -22,6 +22,7 @@ import ru.serzh272.nfp.data.local.database.entity.*
         MarkEntity::class,
         QualificationByPointsXref::class,
         UserEntity::class,
+        CurrentUserEntity::class,
         MinPointsEntity::class,
         UserCategoryEntity::class
     ],
@@ -32,7 +33,7 @@ abstract class RoomDb : RoomDatabase() {
 
     companion object {
         const val DATABASE_NAME = "ru.serzh272.nfp.db"
-        const val DATABASE_VERSION = 1
+        const val DATABASE_VERSION = 2
     }
 
     abstract val exerciseDao: ExerciseDao
