@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.rxjava2.subscribeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -37,7 +38,7 @@ import ru.serzh272.nfp.ui.theme.NFPTheme
 
 @Composable
 fun NormsScreen(modifier: Modifier = Modifier, normsViewModel: NormsViewModel = viewModel(), gridSpacing: Dp = 8.dp) {
-    val uiState by normsViewModel.normsUiState.collectAsState()
+    val uiState by normsViewModel.normsUiState.subscribeAsState(initial = NormsScreenUiState())
 
     NormsScreenContent(modifier, uiState, gridSpacing, normsViewModel::handleCommand)
 }

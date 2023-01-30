@@ -3,13 +3,11 @@ package ru.serzh272.nfp.presentation.norms
 import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
+import io.reactivex.Observable
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.BehaviorSubject
 import ru.serzh272.nfp.domain.model.Exercise
 import ru.serzh272.nfp.domain.usecase.GetExercisesUseCase
 import javax.inject.Inject
@@ -20,35 +18,38 @@ class NormsViewModel @Inject constructor(
     getExercisesUseCase: GetExercisesUseCase,
 ) : ViewModel() {
 
+    private var disposables = CompositeDisposable()
+
     private var allExercises: List<Exercise> = listOf()
 
-    private val exercisesFlow: Flow<List<Exercise>> = getExercisesUseCase()
+    private val exercisesSubscription: Observable<List<Exercise>> = getExercisesUseCase()
 
-    private val _normsUiState: MutableStateFlow<NormsScreenUiState> = MutableStateFlow(NormsScreenUiState())
-    val normsUiState: StateFlow<NormsScreenUiState> = _normsUiState
+    private val _normsUiState: BehaviorSubject<NormsScreenUiState> = BehaviorSubject.createDefault(NormsScreenUiState())
+    val normsUiState: Observable<NormsScreenUiState> = _normsUiState
 
     init {
-        viewModelScope.launch(Dispatchers.IO) {
-            exercisesFlow.collect {
+        exercisesSubscription.subscribeOn(Schedulers.io())
+            .subscribe {
                 allExercises = it
-                val selectedExercises = normsUiState.value.selectedExercises.intersect(allExercises.toSet())
+                val selectedExercises = _normsUiState.value!!.selectedExercises.intersect(allExercises.toSet())
                 val selectionMode = selectedExercises.isNotEmpty()
-                setUiState(normsUiState.value.copy(exercises = allExercises, selectedExercises = selectedExercises, selectionMode = selectionMode))
+                setUiState(_normsUiState.value!!.copy(exercises = allExercises, selectedExercises = selectedExercises, selectionMode = selectionMode))
+            }.also {
+                disposables.add(it)
             }
-        }
     }
 
     fun setUiState(state: NormsScreenUiState) {
-        _normsUiState.value = state.copy(exercises = if (state.searchQuery.isBlank()) allExercises else allExercises.filter {
+        _normsUiState.onNext(state.copy(exercises = if (state.searchQuery.isBlank()) allExercises else allExercises.filter {
             it.name.contains(
                 state.searchQuery,
                 true
             )
-        }).let { res -> if (res.filter.isEmpty()) res else res.copy(exercises = res.exercises.filter { res.filter.contains(it.exerciseType) }) }
+        }).let { res -> if (res.filter.isEmpty()) res else res.copy(exercises = res.exercises.filter { res.filter.contains(it.exerciseType) }) })
     }
 
     private fun handleItemSelection(item: Exercise) {
-        with(normsUiState.value) {
+        with(_normsUiState.value!!) {
             if (item in selectedExercises && selectedExercises.size == 1 || selectedExercises.isEmpty()) {
                 setUiState(copy(selectionMode = false, selectedExercises = emptySet()))
             } else {
@@ -74,5 +75,10 @@ class NormsViewModel @Inject constructor(
         data class ChangeUiState(val uiState: NormsScreenUiState) : NormsScreenCommand()
         data class SelectItem(val item: Exercise) : NormsScreenCommand()
         data class AddToComplex(val exercises: Set<Exercise>) : NormsScreenCommand()
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        disposables.clear()
     }
 }
