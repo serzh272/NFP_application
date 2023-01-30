@@ -7,8 +7,9 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import ru.serzh272.nfp.data.local.database.RoomDatabaseCallback
 import ru.serzh272.nfp.data.local.database.RoomDb
+import ru.serzh272.nfp.data.local.database.migration.RoomDatabaseCallback
+import ru.serzh272.nfp.data.local.database.migration.RoomMigrations
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -18,6 +19,7 @@ class DatabaseModule {
     fun provideRoomDatabase(@ApplicationContext context: Context): RoomDb {
         return Room.databaseBuilder(context, RoomDb::class.java, RoomDb.DATABASE_NAME)
             .addCallback(RoomDatabaseCallback())
+            .addMigrations(migrations = RoomMigrations.migrations)
             .createFromAsset("nfp_prepopulated.db")
             .build()
     }

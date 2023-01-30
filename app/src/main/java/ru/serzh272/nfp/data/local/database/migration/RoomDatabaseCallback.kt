@@ -1,4 +1,4 @@
-package ru.serzh272.nfp.data.local.database
+package ru.serzh272.nfp.data.local.database.migration
 
 import androidx.room.RoomDatabase
 
