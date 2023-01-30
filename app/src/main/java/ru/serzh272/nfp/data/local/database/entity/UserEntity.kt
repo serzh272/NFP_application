@@ -18,6 +18,7 @@ import java.util.*
 data class UserEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Long,
+    val name: String = "Noname",
     @ColumnInfo(name = "category_id")
     val categoryId: Long,
     @ColumnInfo(name = "group_id")
