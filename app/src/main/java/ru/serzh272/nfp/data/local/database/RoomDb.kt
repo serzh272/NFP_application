@@ -3,9 +3,7 @@ package ru.serzh272.nfp.data.local.database
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import ru.serzh272.nfp.data.local.database.dao.ExamDao
-import ru.serzh272.nfp.data.local.database.dao.ExerciseDao
-import ru.serzh272.nfp.data.local.database.dao.PointsDao
+import ru.serzh272.nfp.data.local.database.dao.*
 import ru.serzh272.nfp.data.local.database.entity.*
 
 @Database(
@@ -39,4 +37,10 @@ abstract class RoomDb : RoomDatabase() {
     abstract val exerciseDao: ExerciseDao
     abstract val examDao: ExamDao
     abstract val pointsDao: PointsDao
+    abstract val userDao: UserDao
+    abstract val groupDao: GroupDao
+    abstract val categoryDao: CategoryDao
+    abstract val ageGroupDao: AgeGroupDao
+    abstract val minPointsDao: MinPointsDao
+    abstract val userCategoryDao: UserCategoryDao
 }

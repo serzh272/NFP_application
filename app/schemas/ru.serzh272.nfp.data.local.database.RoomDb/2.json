@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "0020b233ba3a4a37186c5dd2e61bf271",
+    "identityHash": "65952e6ade32974badb7eb9b3c4a2b7c",
     "entities": [
       {
         "tableName": "exercise",
@@ -681,7 +681,7 @@
       },
       {
         "tableName": "user",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `category_id` INTEGER NOT NULL, `group_id` INTEGER NOT NULL, `birth_date` INTEGER NOT NULL, `gender` TEXT NOT NULL, `weight` REAL NOT NULL, FOREIGN KEY(`category_id`) REFERENCES `category`(`id`) ON UPDATE NO ACTION ON DELETE NO ACTION , FOREIGN KEY(`group_id`) REFERENCES `group`(`id`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `group_id` INTEGER NOT NULL, `birth_date` INTEGER NOT NULL, `gender` TEXT NOT NULL, `weight` REAL NOT NULL, FOREIGN KEY(`group_id`) REFERENCES `group`(`id`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
         "fields": [
           {
             "fieldPath": "id",
@@ -693,12 +693,6 @@
             "fieldPath": "name",
             "columnName": "name",
             "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "categoryId",
-            "columnName": "category_id",
-            "affinity": "INTEGER",
             "notNull": true
           },
           {
@@ -743,28 +737,16 @@
             "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_user_id` ON `${TABLE_NAME}` (`id`)"
           },
           {
-            "name": "index_user_category_id_group_id",
+            "name": "index_user_group_id",
             "unique": false,
             "columnNames": [
-              "category_id",
               "group_id"
             ],
             "orders": [],
-            "createSql": "CREATE INDEX IF NOT EXISTS `index_user_category_id_group_id` ON `${TABLE_NAME}` (`category_id`, `group_id`)"
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_user_group_id` ON `${TABLE_NAME}` (`group_id`)"
           }
         ],
         "foreignKeys": [
-          {
-            "table": "category",
-            "onDelete": "NO ACTION",
-            "onUpdate": "NO ACTION",
-            "columns": [
-              "category_id"
-            ],
-            "referencedColumns": [
-              "id"
-            ]
-          },
           {
             "table": "group",
             "onDelete": "NO ACTION",
@@ -927,7 +909,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0020b233ba3a4a37186c5dd2e61bf271')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '65952e6ade32974badb7eb9b3c4a2b7c')"
     ]
   }
 }
