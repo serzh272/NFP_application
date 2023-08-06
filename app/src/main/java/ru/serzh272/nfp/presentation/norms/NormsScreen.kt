@@ -28,12 +28,15 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.flowlayout.FlowRow
+import ru.serzh272.common.constants.EMPTY_STRING
+import ru.serzh272.data.ExerciseType
 import ru.serzh272.nfp.R
-import ru.serzh272.nfp.core.constants.EMPTY_STRING
-import ru.serzh272.nfp.data.local.database.entity.enums.ExerciseType
-import ru.serzh272.nfp.domain.DomainDataHolder
-import ru.serzh272.nfp.domain.model.Exercise
+import ru.serzh272.nfp.domain.model.ExerciseUi
+import ru.serzh272.nfp.domain.model.ExerciseUi.Companion.toExerciseUi
 import ru.serzh272.nfp.ui.theme.NFPTheme
+import ru.serzh272.norms.DomainDataHolder
+import ru.serzh272.norms.mapper.toExerciseType
+import ru.serzh272.core.ui.R as CoreUiR
 
 @Composable
 fun NormsScreen(modifier: Modifier = Modifier, normsViewModel: NormsViewModel = viewModel(), gridSpacing: Dp = 8.dp) {
@@ -63,7 +66,7 @@ fun NormsScreenContent(modifier: Modifier = Modifier, uiState: NormsScreenUiStat
                         {
                             IconButton(onClick = { command(NormsViewModel.NormsScreenCommand.ChangeUiState(uiState.copy(searchQuery = ""))) }) {
                                 Icon(
-                                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_close_24),
+                                    imageVector = ImageVector.vectorResource(id = CoreUiR.drawable.ic_close_24),
                                     contentDescription = stringResource(id = R.string.search)
                                 )
                             }
@@ -76,9 +79,9 @@ fun NormsScreenContent(modifier: Modifier = Modifier, uiState: NormsScreenUiStat
                     })
                 IconButton(onClick = { command(NormsViewModel.NormsScreenCommand.ChangeUiState(uiState.copy(filterDialogShow = true))) }) {
                     Icon(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_filter),
+                        imageVector = ImageVector.vectorResource(id = CoreUiR.drawable.ic_filter),
                         contentDescription = "",
-                        tint = if (uiState.filter.isEmpty()) MaterialTheme.colors.primary else colorResource(id = R.color.spanish_orange)
+                        tint = if (uiState.filter.isEmpty()) MaterialTheme.colors.primary else colorResource(id = CoreUiR.color.spanish_orange)
                     )
                 }
             }
@@ -94,8 +97,8 @@ fun NormsScreenContent(modifier: Modifier = Modifier, uiState: NormsScreenUiStat
                             .height(40.dp), color = MaterialTheme.colors.primary, shape = RoundedCornerShape(50)
                     ) {
                         Chip(stringResource(id = R.string.exercise, " ${it.id}"),
-                            leadingIcon = ImageVector.vectorResource(id = it.exerciseType.iconRes),
-                            trailingIcon = ImageVector.vectorResource(id = R.drawable.ic_close_24),
+                            leadingIcon = ImageVector.vectorResource(id = it.exerciseTypeDomain.toExerciseType().iconRes),
+                            trailingIcon = ImageVector.vectorResource(id = CoreUiR.drawable.ic_close_24),
                             onTrailingIconClick = { command(NormsViewModel.NormsScreenCommand.SelectItem(it)) })
                     }
                 }
@@ -108,7 +111,7 @@ fun NormsScreenContent(modifier: Modifier = Modifier, uiState: NormsScreenUiStat
                 verticalArrangement = Arrangement.spacedBy(gridSpacing),
                 content = {
                     items(uiState.exercises, key = { it.id }) { exercise ->
-                        val clickable = exercise.exerciseType !in uiState.selectedExercises.map { it.exerciseType } || exercise in uiState.selectedExercises
+                        val clickable = exercise.exerciseTypeDomain !in uiState.selectedExercises.map { it.exerciseTypeDomain } || exercise in uiState.selectedExercises
                         val clickableColor = if (exercise in uiState.selectedExercises) MaterialTheme.colors.secondary else MaterialTheme.colors.secondaryVariant
                         ExerciseCard(
                             modifier = Modifier
@@ -125,7 +128,7 @@ fun NormsScreenContent(modifier: Modifier = Modifier, uiState: NormsScreenUiStat
                                 }
                                 .animateItemPlacement(),
                             exercise = exercise,
-                            backgroundColor = if (clickable) clickableColor else colorResource(id = R.color.silver_sand)
+                            backgroundColor = if (clickable) clickableColor else colorResource(id = CoreUiR.color.silver_sand)
                         )
                     }
                 })
@@ -135,7 +138,7 @@ fun NormsScreenContent(modifier: Modifier = Modifier, uiState: NormsScreenUiStat
                 .align(Alignment.BottomEnd)
                 .padding(24.dp), onClick = { command(NormsViewModel.NormsScreenCommand.AddToComplex(uiState.selectedExercises)) }) {
                 Icon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_image_placeholder),
+                    imageVector = ImageVector.vectorResource(id = CoreUiR.drawable.ic_image_placeholder),
                     contentDescription = stringResource(R.string.add_to_complex),
                     tint = MaterialTheme.colors.onPrimary
                 )
@@ -202,7 +205,7 @@ private fun Chip(
 }
 
 @Composable
-fun ExerciseCard(modifier: Modifier, exercise: Exercise, backgroundColor: Color) {
+fun ExerciseCard(modifier: Modifier, exercise: ExerciseUi, backgroundColor: Color) {
     Card(
         modifier = modifier,
         backgroundColor = backgroundColor
@@ -213,7 +216,7 @@ fun ExerciseCard(modifier: Modifier, exercise: Exercise, backgroundColor: Color)
                     .height(52.dp)
                     .fillMaxWidth()
                     .padding(start = 4.dp, top = 4.dp, end = 4.dp),
-                imageVector = ImageVector.vectorResource(id = exercise.iconRes ?: R.drawable.ic_image_placeholder),
+                imageVector = ImageVector.vectorResource(id = exercise.iconRes ?: CoreUiR.drawable.ic_image_placeholder),
                 contentDescription = "",
                 tint = MaterialTheme.colors.primary
             )
@@ -233,11 +236,12 @@ fun ExerciseCard(modifier: Modifier, exercise: Exercise, backgroundColor: Color)
 @Composable
 fun NormsScreenPreview() {
     NFPTheme {
+        val exercises = DomainDataHolder.exercises.map { it.toExerciseUi() }
         NormsScreenContent(
             modifier = Modifier
                 .fillMaxSize(),
             gridSpacing = 8.dp,
-            uiState = NormsScreenUiState(exercises = DomainDataHolder.exercises, selectedExercises = DomainDataHolder.exercises.take(2).toSet()),
+            uiState = NormsScreenUiState(exercises = exercises, selectedExercises = exercises.take(2).toSet()),
             command = {},
         )
     }

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="strength">Strength</string>
+    <string name="speed">Speed</string>
+    <string name="endurance">Endurance</string>
+    <string name="agility">Agility</string>
+    <string name="military_skills">Military skills</string>
+</resources>

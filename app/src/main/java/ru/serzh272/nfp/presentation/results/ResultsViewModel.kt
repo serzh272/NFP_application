@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import ru.serzh272.nfp.domain.DomainDataHolder
+import ru.serzh272.norms.DomainDataHolder
 import javax.inject.Inject
 
 @HiltViewModel

@@ -1,3 +1,4 @@
+@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -8,12 +9,12 @@ plugins {
 
 android {
     namespace = "ru.serzh272.nfp"
-    compileSdkVersion(33)
+    compileSdk = 33
 
     defaultConfig {
         applicationId = "ru.serzh272.nfp"
-        minSdkVersion(23)
-        targetSdkVersion(33)
+        minSdk = 24
+        targetSdk = 33
         versionCode = 1
         versionName = "1.0"
 
@@ -57,6 +58,12 @@ android {
 }
 
 dependencies {
+
+    implementation(project(":data"))
+    implementation(project(":feature:data:norms"))
+    implementation(project(":feature:domain:norms"))
+    implementation(project(":core:ui"))
+    implementation(project(":core:common"))
 
     implementation(libs.androidCoreKtx)
     implementation(libs.lifecycleRuntimeKtx)

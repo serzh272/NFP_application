@@ -5,7 +5,13 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.*
+import androidx.compose.material.BottomNavigation
+import androidx.compose.material.BottomNavigationItem
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -23,7 +29,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
-import ru.serzh272.nfp.R
 import ru.serzh272.nfp.presentation.component.IMainViewModel
 import ru.serzh272.nfp.presentation.component.MainViewModel
 import ru.serzh272.nfp.presentation.component.RootNavHost
@@ -79,7 +84,7 @@ class MainActivity : ComponentActivity() {
                             },
                             selectedContentColor = MaterialTheme.colors.primary,
                             unselectedContentColor = colorResource(
-                                id = R.color.silver_sand
+                                id = ru.serzh272.core.ui.R.color.silver_sand
                             )
                         )
                     }

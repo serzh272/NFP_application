@@ -1,6 +1,14 @@
 package ru.serzh272.nfp.presentation.results
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Card
@@ -16,11 +24,11 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import ru.serzh272.nfp.domain.DomainDataHolder
-import ru.serzh272.nfp.domain.model.Exam
-import ru.serzh272.nfp.domain.model.ExerciseWithResult
 import ru.serzh272.nfp.presentation.custom.PointsIndicator
 import ru.serzh272.nfp.ui.theme.NFPTheme
+import ru.serzh272.norms.DomainDataHolder
+import ru.serzh272.norms.model.Exam
+import ru.serzh272.norms.model.ExerciseWithResult
 
 @Composable
 fun ResultsScreen(modifier: Modifier = Modifier, viewModel: ResultsViewModel = viewModel()) {

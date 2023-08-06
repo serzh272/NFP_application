@@ -9,9 +9,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import ru.serzh272.nfp.domain.model.Exercise
-import ru.serzh272.nfp.domain.usecase.GetExercisesUseCase
+import ru.serzh272.nfp.domain.model.ExerciseUi
+import ru.serzh272.nfp.domain.model.ExerciseUi.Companion.toExerciseUi
+import ru.serzh272.norms.mapper.toExerciseType
+import ru.serzh272.norms.usecase.GetExercisesUseCase
 import javax.inject.Inject
 
 @HiltViewModel
@@ -20,9 +23,9 @@ class NormsViewModel @Inject constructor(
     getExercisesUseCase: GetExercisesUseCase,
 ) : ViewModel() {
 
-    private var allExercises: List<Exercise> = listOf()
+    private var allExercises: List<ExerciseUi> = listOf()
 
-    private val exercisesFlow: Flow<List<Exercise>> = getExercisesUseCase()
+    private val exercisesFlow: Flow<List<ExerciseUi>> = getExercisesUseCase().map { exercises -> exercises.map { exercise -> exercise.toExerciseUi() } }
 
     private val _normsUiState: MutableStateFlow<NormsScreenUiState> = MutableStateFlow(NormsScreenUiState())
     val normsUiState: StateFlow<NormsScreenUiState> = _normsUiState
@@ -44,10 +47,10 @@ class NormsViewModel @Inject constructor(
                 state.searchQuery,
                 true
             )
-        }).let { res -> if (res.filter.isEmpty()) res else res.copy(exercises = res.exercises.filter { res.filter.contains(it.exerciseType) }) }
+        }).let { res -> if (res.filter.isEmpty()) res else res.copy(exercises = res.exercises.filter { res.filter.contains(it.exerciseTypeDomain.toExerciseType()) }) }
     }
 
-    private fun handleItemSelection(item: Exercise) {
+    private fun handleItemSelection(item: ExerciseUi) {
         with(normsUiState.value) {
             if (item in selectedExercises && selectedExercises.size == 1 || selectedExercises.isEmpty()) {
                 setUiState(copy(selectionMode = false, selectedExercises = emptySet()))
@@ -65,14 +68,14 @@ class NormsViewModel @Inject constructor(
         }
     }
 
-    private fun handleAddToComplex(exercises: Set<Exercise>) {
+    private fun handleAddToComplex(exercises: Set<ExerciseUi>) {
         setUiState(NormsScreenUiState(allExercises))
         Log.d("M_NormsViewModel", "$exercises")
     }
 
     sealed class NormsScreenCommand {
         data class ChangeUiState(val uiState: NormsScreenUiState) : NormsScreenCommand()
-        data class SelectItem(val item: Exercise) : NormsScreenCommand()
-        data class AddToComplex(val exercises: Set<Exercise>) : NormsScreenCommand()
+        data class SelectItem(val item: ExerciseUi) : NormsScreenCommand()
+        data class AddToComplex(val exercises: Set<ExerciseUi>) : NormsScreenCommand()
     }
 }

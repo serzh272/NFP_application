@@ -4,12 +4,12 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import ru.serzh272.nfp.data.repository.MainRepository
-import ru.serzh272.nfp.data.repository.NormsRepository
-import ru.serzh272.nfp.data.repository.ProfileRepository
-import ru.serzh272.nfp.domain.repository.IMainRepository
-import ru.serzh272.nfp.domain.repository.INormsRepository
-import ru.serzh272.nfp.domain.repository.IProfileRepository
+import ru.serzh272.data.repository.MainRepository
+import ru.serzh272.data.repository.ProfileRepository
+import ru.serzh272.norms.repository.INormsRepository
+import ru.serzh272.norms.repository.NormsRepository
+import ru.serzh272.repository.IMainRepository
+import ru.serzh272.repository.IProfileRepository
 
 @Module
 @InstallIn(SingletonComponent::class)
