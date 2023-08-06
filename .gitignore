@@ -19,3 +19,5 @@ local.properties
 /.idea/
 /figma_icons/
 /.editorconfig
+/build-logic/build/
+/build-logic/convention/build/

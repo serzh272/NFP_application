@@ -1,6 +1,6 @@
 [versions]
-gradle="7.4.0"
-kotlin="1.8.0"
+androidGradlePlugin="8.0.2"
+kotlin="1.8.10"
 hilt="2.47"
 composeUiVersion="1.4.3"
 roomVersion="2.5.2"
@@ -42,9 +42,13 @@ debugComposeUiTestManifest = { group = "androidx.compose.ui", name = "ui-test-ma
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
+#build-logic dependencies
+android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
+kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
+
 [plugins]
-android-application = {id = "com.android.application", version.ref="gradle"}
-android-library = {id = "com.android.library", version.ref="gradle"}
+android-application = {id = "com.android.application", version.ref="androidGradlePlugin"}
+android-library = {id = "com.android.library", version.ref="androidGradlePlugin"}
 kotlin-android = {id = "org.jetbrains.kotlin.android", version.ref="kotlin"}
 dagger-hilt-android = {id = "com.google.dagger.hilt.android", version.ref="hilt"}
 kotlin-kapt = {id = "org.jetbrains.kotlin.kapt", version.ref="kotlin"}
