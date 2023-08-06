@@ -36,5 +36,9 @@ gradlePlugin {
             id = "nfp.android.featureData"
             implementationClass = "FeatureDataConventionPlugin"
         }
+        register("androidFeatureDomain") {
+            id = "nfp.android.featureDomain"
+            implementationClass = "FeatureDomainConventionPlugin"
+        }
     }
 }
