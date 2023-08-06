@@ -32,5 +32,9 @@ gradlePlugin {
             id = "nfp.android.featureUi"
             implementationClass = "ComposeFeatureUiConventionPlugin"
         }
+        register("androidFeatureData") {
+            id = "nfp.android.featureData"
+            implementationClass = "FeatureDataConventionPlugin"
+        }
     }
 }
