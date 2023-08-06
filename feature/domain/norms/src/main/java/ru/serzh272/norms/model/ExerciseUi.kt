@@ -1,7 +1,4 @@
-package ru.serzh272.nfp.domain.model
-
-import ru.serzh272.norms.model.Exercise
-import ru.serzh272.norms.model.ExerciseTypeDomain
+package ru.serzh272.norms.model
 
 data class ExerciseUi(
     val id: Long,

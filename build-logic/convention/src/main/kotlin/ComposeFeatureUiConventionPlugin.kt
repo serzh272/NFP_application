@@ -14,7 +14,7 @@
  *   limitations under the License.
  */
 
-import com.android.build.api.dsl.ApplicationExtension
+import com.android.build.gradle.LibraryExtension
 import ext.libs
 import org.gradle.api.JavaVersion
 import org.gradle.api.Plugin
@@ -23,21 +23,18 @@ import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 
 @Suppress("MagicNumber")
-class AndroidApplicationConventionPlugin : Plugin<Project> {
+class ComposeFeatureUiConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             with(pluginManager) {
-                apply("com.android.application")
+                apply("com.android.library")
                 apply("org.jetbrains.kotlin.android")
+                apply("org.jetbrains.kotlin.kapt")
+                apply("com.google.dagger.hilt.android")
             }
-
-            extensions.configure<ApplicationExtension> {
+            extensions.configure<LibraryExtension> {
                 compileSdk = 33
-                defaultConfig.apply {
-                    targetSdk = 33
-                    minSdk = 24
-                }
-
+                namespace = "ru.serzh272.nfp.ui.$name"
                 compileOptions {
                     sourceCompatibility = JavaVersion.VERSION_17
                     targetCompatibility = JavaVersion.VERSION_17
@@ -51,33 +48,19 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
                     compose = true
                 }
 
-                buildTypes {
-                    getByName("release") {
-                        isMinifyEnabled = true
-                        proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-                    }
-                }
-                defaultConfig {
-                    vectorDrawables {
-                        useSupportLibrary = true
-                        versionCode = 1
-                        versionName = "1.0"
-                    }
-                }
-
-                packaging {
-                    resources {
-                        excludes += "/META-INF/{AL2.0,LGPL2.1}"
-                    }
-                }
-
                 dependencies {
-                    add("implementation", project(":data"))
-                    add("implementation", project(":feature:data:norms"))
-                    add("implementation", project(":feature:ui:norms"))
-                    add("implementation", project(":feature:domain:norms"))
                     add("implementation", project(":core:ui"))
                     add("implementation", project(":core:common"))
+                    add("implementation", project(path.replace("ui:$name", "domain:$name")))
+                    add("implementation", libs.findLibrary("composeUi").get())
+                    add("implementation", libs.findLibrary("composePreview").get())
+                    add("implementation", libs.findLibrary("composeMaterial").get())
+                    add("implementation", libs.findLibrary("hilt").get())
+                    add("kapt", libs.findLibrary("hiltCompiler").get())
+                    add("implementation", libs.findLibrary("composeNavigation").get())
+                    add("testImplementation", libs.findLibrary("junit").get())
+                    add("androidTestImplementation", libs.findLibrary("junitExt").get())
+                    add("androidTestImplementation", libs.findLibrary("espressoCore").get())
                 }
 
             }

@@ -28,14 +28,21 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_17.toString()
     }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = libs.versions.composeUiVersion.get()
+    }
+
+    buildFeatures {
+        compose = true
+    }
 }
 
 dependencies {
 
     implementation(libs.androidCoreKtx)
-    implementation(libs.appcompat)
-    implementation(libs.material)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.junitExt)
-    androidTestImplementation(libs.espressoCore)
+
+    implementation(libs.composeUi)
+    implementation(libs.composePreview)
+    implementation(libs.composeMaterial)
 }

@@ -1,4 +1,4 @@
-package ru.serzh272.nfp.presentation.norms
+package ru.serzh272.norms
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -29,13 +29,12 @@ import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.flowlayout.FlowRow
 import ru.serzh272.common.constants.EMPTY_STRING
-import ru.serzh272.data.ExerciseType
-import ru.serzh272.nfp.R
-import ru.serzh272.nfp.domain.model.ExerciseUi
-import ru.serzh272.nfp.domain.model.ExerciseUi.Companion.toExerciseUi
-import ru.serzh272.nfp.ui.theme.NFPTheme
-import ru.serzh272.norms.DomainDataHolder
+import ru.serzh272.nfp.ui.norms.R
 import ru.serzh272.norms.mapper.toExerciseType
+import ru.serzh272.norms.model.ExerciseTypeDomain
+import ru.serzh272.norms.model.ExerciseUi
+import ru.serzh272.norms.model.ExerciseUi.Companion.toExerciseUi
+import ru.serzh272.ui.theme.NFPTheme
 import ru.serzh272.core.ui.R as CoreUiR
 
 @Composable
@@ -96,8 +95,8 @@ fun NormsScreenContent(modifier: Modifier = Modifier, uiState: NormsScreenUiStat
                             .wrapContentSize()
                             .height(40.dp), color = MaterialTheme.colors.primary, shape = RoundedCornerShape(50)
                     ) {
-                        Chip(stringResource(id = R.string.exercise, " ${it.id}"),
-                            leadingIcon = ImageVector.vectorResource(id = it.exerciseTypeDomain.toExerciseType().iconRes),
+                        Chip(stringResource(id = CoreUiR.string.exercise, " ${it.id}"),
+                            leadingIcon = ImageVector.vectorResource(id = it.iconRes ?: CoreUiR.drawable.ic_image_placeholder),
                             trailingIcon = ImageVector.vectorResource(id = CoreUiR.drawable.ic_close_24),
                             onTrailingIconClick = { command(NormsViewModel.NormsScreenCommand.SelectItem(it)) })
                     }
@@ -155,12 +154,12 @@ fun NormsScreenContent(modifier: Modifier = Modifier, uiState: NormsScreenUiStat
                     .padding(8.dp)
             ) {
                 Text(modifier = Modifier.fillMaxWidth(), text = stringResource(id = R.string.filter), textAlign = TextAlign.Center)
-                ExerciseType.availableValues.forEach { type ->
+                ExerciseTypeDomain.availableValues.forEach { type ->
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Checkbox(checked = uiState.filter.contains(type), onCheckedChange = { checked ->
                             command(NormsViewModel.NormsScreenCommand.ChangeUiState(uiState.copy(filter = if (checked) uiState.filter + type else uiState.filter - type)))
                         })
-                        Text(text = stringResource(id = type.humanizeNameRes))
+                        Text(text = stringResource(id = type.toExerciseType().humanizeNameRes))
                     }
                 }
 

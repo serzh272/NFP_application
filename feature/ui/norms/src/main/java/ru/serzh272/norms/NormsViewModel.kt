@@ -1,4 +1,4 @@
-package ru.serzh272.nfp.presentation.norms
+package ru.serzh272.norms
 
 import android.util.Log
 import androidx.lifecycle.SavedStateHandle
@@ -11,9 +11,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import ru.serzh272.nfp.domain.model.ExerciseUi
-import ru.serzh272.nfp.domain.model.ExerciseUi.Companion.toExerciseUi
-import ru.serzh272.norms.mapper.toExerciseType
+import ru.serzh272.norms.model.ExerciseUi
+import ru.serzh272.norms.model.ExerciseUi.Companion.toExerciseUi
 import ru.serzh272.norms.usecase.GetExercisesUseCase
 import javax.inject.Inject
 
@@ -47,7 +46,7 @@ class NormsViewModel @Inject constructor(
                 state.searchQuery,
                 true
             )
-        }).let { res -> if (res.filter.isEmpty()) res else res.copy(exercises = res.exercises.filter { res.filter.contains(it.exerciseTypeDomain.toExerciseType()) }) }
+        }).let { res -> if (res.filter.isEmpty()) res else res.copy(exercises = res.exercises.filter { res.filter.contains(it.exerciseTypeDomain) }) }
     }
 
     private fun handleItemSelection(item: ExerciseUi) {

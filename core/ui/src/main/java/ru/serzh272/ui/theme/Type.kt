@@ -1,4 +1,4 @@
-package ru.serzh272.nfp.ui.theme
+package ru.serzh272.ui.theme
 
 import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle

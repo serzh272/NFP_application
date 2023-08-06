@@ -25,10 +25,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import ru.serzh272.nfp.presentation.custom.PointsIndicator
-import ru.serzh272.nfp.ui.theme.NFPTheme
 import ru.serzh272.norms.DomainDataHolder
 import ru.serzh272.norms.model.Exam
 import ru.serzh272.norms.model.ExerciseWithResult
+import ru.serzh272.ui.theme.NFPTheme
 
 @Composable
 fun ResultsScreen(modifier: Modifier = Modifier, viewModel: ResultsViewModel = viewModel()) {

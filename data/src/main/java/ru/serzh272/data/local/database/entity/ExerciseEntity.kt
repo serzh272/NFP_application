@@ -5,8 +5,8 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import ru.serzh272.data.ExerciseType
 import ru.serzh272.data.local.database.entity.enums.ExerciseUnit
+import ru.serzh272.norms.model.ExerciseTypeDomain
 import java.util.Date
 
 @Entity(
@@ -19,7 +19,7 @@ data class ExerciseEntity(
     @ColumnInfo(name = "exercise_name")
     val exerciseName: String,
     @ColumnInfo(name = "exercise_type")
-    val exerciseType: ExerciseType,
+    val exerciseType: ExerciseTypeDomain,
     val description: String? = null,
     @ColumnInfo(name = "only_military", defaultValue = "0")
     val onlyMilitary: Boolean = false,

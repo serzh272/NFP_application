@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="search">Search</string>
+    <string name="add_to_complex">Add to complex</string>
+    <string name="filter">Filter</string>
+    <string name="clear">Очистить</string>
+    <string name="apply">Применить</string>
+</resources>

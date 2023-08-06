@@ -33,7 +33,7 @@ import ru.serzh272.nfp.presentation.component.IMainViewModel
 import ru.serzh272.nfp.presentation.component.MainViewModel
 import ru.serzh272.nfp.presentation.component.RootNavHost
 import ru.serzh272.nfp.presentation.component.RootNavigation
-import ru.serzh272.nfp.ui.theme.NFPTheme
+import ru.serzh272.ui.theme.NFPTheme
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
