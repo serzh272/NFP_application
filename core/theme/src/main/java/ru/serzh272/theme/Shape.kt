@@ -1,4 +1,4 @@
-package ru.serzh272.ui.theme
+package ru.serzh272.theme
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Shapes

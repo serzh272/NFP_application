@@ -11,7 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
-import ru.serzh272.ui.theme.NFPTheme
 
 @Composable
 fun ProfileScreen(modifier: Modifier = Modifier, viewModel: ProfileViewModel = viewModel()) {
@@ -31,7 +30,7 @@ fun ProfileScreenContent(modifier: Modifier = Modifier, uiState: ProfileScreenUi
 @Preview(device = Devices.PIXEL_4, showBackground = true, widthDp = 360, heightDp = 640)
 @Composable
 fun NProfileScreenPreview() {
-    NFPTheme {
+    ru.serzh272.theme.NFPTheme {
         ProfileScreenContent(
             modifier = Modifier
                 .fillMaxSize(),

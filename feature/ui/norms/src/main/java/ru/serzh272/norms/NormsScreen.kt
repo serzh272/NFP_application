@@ -34,8 +34,8 @@ import ru.serzh272.norms.mapper.toExerciseType
 import ru.serzh272.norms.model.ExerciseTypeDomain
 import ru.serzh272.norms.model.ExerciseUi
 import ru.serzh272.norms.model.ExerciseUi.Companion.toExerciseUi
-import ru.serzh272.ui.theme.NFPTheme
 import ru.serzh272.core.ui.R as CoreUiR
+import ru.serzh272.nfp.core.theme.R as ThemeR
 
 @Composable
 fun NormsScreen(modifier: Modifier = Modifier, normsViewModel: NormsViewModel = viewModel(), gridSpacing: Dp = 8.dp) {
@@ -80,7 +80,7 @@ fun NormsScreenContent(modifier: Modifier = Modifier, uiState: NormsScreenUiStat
                     Icon(
                         imageVector = ImageVector.vectorResource(id = CoreUiR.drawable.ic_filter),
                         contentDescription = "",
-                        tint = if (uiState.filter.isEmpty()) MaterialTheme.colors.primary else colorResource(id = CoreUiR.color.spanish_orange)
+                        tint = if (uiState.filter.isEmpty()) MaterialTheme.colors.primary else colorResource(id = ThemeR.color.spanish_orange)
                     )
                 }
             }
@@ -127,7 +127,7 @@ fun NormsScreenContent(modifier: Modifier = Modifier, uiState: NormsScreenUiStat
                                 }
                                 .animateItemPlacement(),
                             exercise = exercise,
-                            backgroundColor = if (clickable) clickableColor else colorResource(id = CoreUiR.color.silver_sand)
+                            backgroundColor = if (clickable) clickableColor else colorResource(id = ThemeR.color.silver_sand)
                         )
                     }
                 })
@@ -234,7 +234,7 @@ fun ExerciseCard(modifier: Modifier, exercise: ExerciseUi, backgroundColor: Colo
 @Preview(device = Devices.PIXEL_4, showBackground = true, widthDp = 360, heightDp = 640)
 @Composable
 fun NormsScreenPreview() {
-    NFPTheme {
+    ru.serzh272.theme.NFPTheme {
         val exercises = DomainDataHolder.exercises.map { it.toExerciseUi() }
         NormsScreenContent(
             modifier = Modifier

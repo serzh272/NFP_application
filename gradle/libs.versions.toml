@@ -1,12 +1,12 @@
 [versions]
-androidGradlePlugin= "8.1.0"
-kotlin="1.8.10"
-hilt="2.47"
-composeUiVersion="1.4.3"
-roomVersion="2.5.2"
-junit="4.13.2"
-junitExt="1.1.5"
-navigation="2.6.0"
+androidGradlePlugin = "8.1.0"
+kotlin = "1.8.10"
+hilt = "2.47"
+composeUiVersion = "1.4.3"
+roomVersion = "2.5.2"
+junit = "4.13.2"
+junitExt = "1.1.5"
+navigation = "2.6.0"
 espresso = "3.5.1"
 flowlayout = "0.28.0"
 lifecycle = "2.6.1"
@@ -15,44 +15,48 @@ activityCompose = "1.7.2"
 hiltNavigationCompose = "1.0.0"
 appcompat = "1.6.1"
 material = "1.9.0"
+coroutines = "1.7.3"
 
 [libraries]
-androidCoreKtx = { group = "androidx.core", name= "core-ktx", version.ref="androidCoreKtx" }
-lifecycleRuntimeKtx = { group = "androidx.lifecycle", name="lifecycle-runtime-ktx", version.ref="lifecycle" }
-activityCompose = { group = "androidx.activity", name="activity-compose", version.ref="activityCompose" }
-roomRuntime = { group = "androidx.room", name = "room-runtime", version.ref ="roomVersion" }
-roomCompiler = { group = "androidx.room", name = "room-compiler", version.ref ="roomVersion" }
-roomKtx = { group = "androidx.room", name= "room-ktx", version.ref ="roomVersion" }
-roomPaging = { group = "androidx.room", name="room-paging", version.ref ="roomVersion" }
-composeUi = { group = "androidx.compose.ui", name="ui", version.ref ="composeUiVersion" }
-composePreview = { group = "androidx.compose.ui", name="ui-tooling-preview", version.ref ="composeUiVersion" }
-composeNavigation = { group = "androidx.navigation", name="navigation-compose", version.ref= "navigation" }
-composeMaterial = { group = "androidx.compose.material", name= "material", version.ref = "composeUiVersion" }
-accompanistFlowLayout = { group = "com.google.accompanist", name="accompanist-flowlayout", version.ref = "flowlayout" }
-hilt = { group = "com.google.dagger", name ="hilt-android", version.ref = "hilt" }
-hiltComposeNavigation = { group = "androidx.hilt", name= "hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
+androidCoreKtx = { group = "androidx.core", name = "core-ktx", version.ref = "androidCoreKtx" }
+coroutinesCore = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
+lifecycleRuntimeKtx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle" }
+activityCompose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
+roomRuntime = { group = "androidx.room", name = "room-runtime", version.ref = "roomVersion" }
+roomCompiler = { group = "androidx.room", name = "room-compiler", version.ref = "roomVersion" }
+roomKtx = { group = "androidx.room", name = "room-ktx", version.ref = "roomVersion" }
+roomPaging = { group = "androidx.room", name = "room-paging", version.ref = "roomVersion" }
+composeUi = { group = "androidx.compose.ui", name = "ui", version.ref = "composeUiVersion" }
+composePreview = { group = "androidx.compose.ui", name = "ui-tooling-preview", version.ref = "composeUiVersion" }
+composeNavigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation" }
+composeMaterial = { group = "androidx.compose.material", name = "material", version.ref = "composeUiVersion" }
+accompanistFlowLayout = { group = "com.google.accompanist", name = "accompanist-flowlayout", version.ref = "flowlayout" }
+hilt = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
+hiltComposeNavigation = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 hiltCompiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
-junit = { group = "junit", name="junit", version.ref="junit" }
-roomTesting = { group = "androidx.room", name="room-testing", version.ref = "roomVersion" }
-junitExt = { group = "androidx.test.ext", name="junit", version.ref= "junitExt"}
-espressoCore = { group = "androidx.test.espresso", name="espresso-core", version.ref = "espresso" }
-junitUi = { group = "androidx.compose.ui", name= "ui-test-junit4", version.ref = "composeUiVersion" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+roomTesting = { group = "androidx.room", name = "room-testing", version.ref = "roomVersion" }
+junitExt = { group = "androidx.test.ext", name = "junit", version.ref = "junitExt" }
+espressoCore = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso" }
+junitUi = { group = "androidx.compose.ui", name = "ui-test-junit4", version.ref = "composeUiVersion" }
 debugComposeUiTooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "composeUiVersion" }
 debugComposeUiTestManifest = { group = "androidx.compose.ui", name = "ui-test-manifest", version.ref = "composeUiVersion" }
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+javaxInject = { group = "javax.inject", name = "javax.inject", version = "1" }
 
 #build-logic dependencies
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
 kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 
 [plugins]
-android-application = {id = "com.android.application", version.ref="androidGradlePlugin"}
-android-library = {id = "com.android.library", version.ref="androidGradlePlugin"}
-kotlin-android = {id = "org.jetbrains.kotlin.android", version.ref="kotlin"}
-dagger-hilt-android = {id = "com.google.dagger.hilt.android", version.ref="hilt"}
-kotlin-kapt = {id = "org.jetbrains.kotlin.kapt", version.ref="kotlin"}
-kotlin-parcelize = {id = "org.jetbrains.kotlin.plugin.parcelize", version.ref="kotlin"}
+android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
+android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+dagger-hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
+kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 
 [bundles]
 room = ["roomRuntime", "roomKtx", "roomPaging"]

@@ -33,7 +33,7 @@ import ru.serzh272.nfp.presentation.component.IMainViewModel
 import ru.serzh272.nfp.presentation.component.MainViewModel
 import ru.serzh272.nfp.presentation.component.RootNavHost
 import ru.serzh272.nfp.presentation.component.RootNavigation
-import ru.serzh272.ui.theme.NFPTheme
+import ru.serzh272.nfp.core.theme.R as ThemeR
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -49,7 +49,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            NFPTheme {
+            ru.serzh272.theme.NFPTheme {
                 MainScreen(viewModel = mainViewModel, navigationItems)
             }
         }
@@ -84,7 +84,7 @@ class MainActivity : ComponentActivity() {
                             },
                             selectedContentColor = MaterialTheme.colors.primary,
                             unselectedContentColor = colorResource(
-                                id = ru.serzh272.core.ui.R.color.silver_sand
+                                id = ThemeR.color.silver_sand
                             )
                         )
                     }
@@ -95,7 +95,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun handleTopLevelNavigation(navController:NavHostController, screen:RootNavigation) {
+    private fun handleTopLevelNavigation(navController: NavHostController, screen: RootNavigation) {
         navController.navigate(screen.route) {
             popUpTo(navController.graph.findStartDestination().id) {
                 saveState = true
@@ -108,7 +108,7 @@ class MainActivity : ComponentActivity() {
     @Preview(showBackground = true)
     @Composable
     fun MainScreenPreview() {
-        NFPTheme {
+        ru.serzh272.theme.NFPTheme {
             MainScreen(viewModel = object : IMainViewModel {}, navigationItems)
         }
     }

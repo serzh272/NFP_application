@@ -28,7 +28,6 @@ import ru.serzh272.nfp.presentation.custom.PointsIndicator
 import ru.serzh272.norms.DomainDataHolder
 import ru.serzh272.norms.model.Exam
 import ru.serzh272.norms.model.ExerciseWithResult
-import ru.serzh272.ui.theme.NFPTheme
 
 @Composable
 fun ResultsScreen(modifier: Modifier = Modifier, viewModel: ResultsViewModel = viewModel()) {
@@ -40,8 +39,8 @@ fun ResultsScreen(modifier: Modifier = Modifier, viewModel: ResultsViewModel = v
 @Composable
 fun ResultsScreenContent(modifier: Modifier = Modifier, uiState: ResultsScreenUiState, command: (ResultsViewModel.ResultsScreenCommand) -> Unit) {
     Column(modifier = modifier) {
-        LazyColumn(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(8.dp), contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)){
-            items(uiState.exams, key = {it.id}){
+        LazyColumn(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(8.dp), contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)) {
+            items(uiState.exams, key = { it.id }) {
                 ExamItem(exam = it, onClick = {})
             }
         }
@@ -50,10 +49,14 @@ fun ResultsScreenContent(modifier: Modifier = Modifier, uiState: ResultsScreenUi
 
 @Composable
 private fun ExamItem(exam: Exam, onClick: () -> Unit) {
-    Card(modifier = Modifier
-        .fillMaxWidth()
-        .height(96.dp), backgroundColor = MaterialTheme.colors.secondaryVariant) {
-        Row(modifier = Modifier.fillMaxSize().padding(horizontal = 12.dp), verticalAlignment = Alignment.CenterVertically) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(96.dp), backgroundColor = MaterialTheme.colors.secondaryVariant
+    ) {
+        Row(modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 12.dp), verticalAlignment = Alignment.CenterVertically) {
             Column() {
                 Text(text = "text")
                 Text(text = "text")
@@ -68,7 +71,7 @@ private fun ExamItem(exam: Exam, onClick: () -> Unit) {
 @Preview(device = Devices.PIXEL_4, showBackground = true, widthDp = 360, heightDp = 640)
 @Composable
 fun ResultsScreenPreview() {
-    NFPTheme {
+    ru.serzh272.theme.NFPTheme {
         ResultsScreenContent(
             modifier = Modifier
                 .fillMaxSize(),

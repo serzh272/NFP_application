@@ -62,7 +62,6 @@ class ComposeFeatureUiConventionPlugin : Plugin<Project> {
                     add("androidTestImplementation", libs.findLibrary("junitExt").get())
                     add("androidTestImplementation", libs.findLibrary("espressoCore").get())
                 }
-
             }
         }
     }

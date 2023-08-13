@@ -14,11 +14,11 @@
  *   limitations under the License.
  */
 
-import com.android.build.gradle.LibraryExtension
 import ext.libs
 import org.gradle.api.JavaVersion
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 
@@ -26,41 +26,17 @@ import org.gradle.kotlin.dsl.dependencies
 class FeatureDomainConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
-            with(pluginManager) {
-                apply("com.android.library")
-                apply("org.jetbrains.kotlin.android")
-                apply("org.jetbrains.kotlin.kapt")
-            }
-            extensions.configure<LibraryExtension> {
-                compileSdk = 33
-                namespace = "ru.serzh272.nfp.domain.$name"
-
-                defaultConfig {
-
-                    testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-                    consumerProguardFiles("consumer-rules.pro")
-                }
-                compileOptions {
-                    sourceCompatibility = JavaVersion.VERSION_17
-                    targetCompatibility = JavaVersion.VERSION_17
-                }
-
-                buildTypes {
-                    release {
-                        isMinifyEnabled = false
-                        proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-                    }
-                }
+            pluginManager.apply("org.jetbrains.kotlin.jvm")
+            extensions.configure<JavaPluginExtension> {
+                sourceCompatibility = JavaVersion.VERSION_17
+                targetCompatibility = JavaVersion.VERSION_17
 
                 dependencies {
                     add("implementation", project(":core:common"))
-                    add("implementation", libs.findLibrary("hilt").get())
-                    add("kapt", libs.findLibrary("hiltCompiler").get())
+                    add("implementation", libs.findLibrary("coroutinesCore").get())
+                    add("implementation", libs.findLibrary("javaxInject").get())
                     add("testImplementation", libs.findLibrary("junit").get())
-                    add("androidTestImplementation", libs.findLibrary("junitExt").get())
-                    add("androidTestImplementation", libs.findLibrary("espressoCore").get())
                 }
-
             }
         }
     }

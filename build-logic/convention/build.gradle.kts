@@ -40,5 +40,9 @@ gradlePlugin {
             id = "nfp.android.featureDomain"
             implementationClass = "FeatureDomainConventionPlugin"
         }
+        register("androidLibrary") {
+            id = "nfp.android.library"
+            implementationClass = "AndroidLibraryConventionPlugin"
+        }
     }
 }
