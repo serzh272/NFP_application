@@ -52,7 +52,6 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
 
                 dependencies {
                     add("implementation", project(":data"))
-                    add("implementation", project(":feature:data:norms"))
                     add("implementation", project(":feature:ui:norms"))
                     add("implementation", project(":feature:domain:norms"))
                     add("implementation", project(":core:ui"))

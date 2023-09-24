@@ -15,7 +15,6 @@ dependencyResolutionManagement {
 }
 rootProject.name = "NFP"
 include(":app")
-include(":feature:data:norms")
 include(":feature:domain:norms")
 include(":feature:ui:norms")
 include(":data")

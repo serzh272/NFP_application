@@ -1,10 +1,11 @@
-package ru.serzh272.norms.repository
+package ru.serzh272.data.repository
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import ru.serzh272.data.local.database.RoomDb
-import ru.serzh272.norms.mapper.toExercise
+import ru.serzh272.data.mapper.toExercise
 import ru.serzh272.norms.model.ExerciseDomain
+import ru.serzh272.norms.repository.INormsRepository
 import javax.inject.Inject
 
 class NormsRepository @Inject constructor(
