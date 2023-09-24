@@ -31,6 +31,7 @@ android {
 dependencies {
 
     implementation(project(":feature:domain:norms"))
+    implementation(project(":feature:domain:profile"))
 
     implementation(libs.androidCoreKtx)
 

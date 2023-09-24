@@ -17,6 +17,8 @@ rootProject.name = "NFP"
 include(":app")
 include(":feature:domain:norms")
 include(":feature:ui:norms")
+include(":feature:domain:profile")
+include(":feature:ui:profile")
 include(":data")
 include(":core:common")
 include(":core:ui")

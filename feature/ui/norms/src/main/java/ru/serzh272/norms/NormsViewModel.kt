@@ -77,4 +77,9 @@ class NormsViewModel @Inject constructor(
         data class SelectItem(val item: ExerciseUi) : NormsScreenCommand()
         data class AddToComplex(val exercises: Set<ExerciseUi>) : NormsScreenCommand()
     }
+
+    override fun onCleared() {
+        Log.d("M_NormsViewModel", "cleared")
+        super.onCleared()
+    }
 }

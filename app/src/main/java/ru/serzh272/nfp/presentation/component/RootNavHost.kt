@@ -8,9 +8,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import ru.serzh272.nfp.presentation.profile.ProfileScreen
 import ru.serzh272.nfp.presentation.results.ResultsScreen
 import ru.serzh272.norms.NormsScreen
+import ru.serzh272.norms.ProfileScreen
 
 @Composable
 fun RootNavHost(modifier: Modifier = Modifier, navController: NavHostController, startDestination: String = "norms"){

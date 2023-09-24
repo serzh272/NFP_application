@@ -1,4 +1,4 @@
-package ru.serzh272.data
+package ru.serzh272.norms.model
 
 
 data class UserFullInfo(

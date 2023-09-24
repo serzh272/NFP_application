@@ -1,4 +1,4 @@
-package ru.serzh272.nfp.presentation.profile
+package ru.serzh272.norms
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -8,7 +8,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import ru.serzh272.nfp.domain.usecase.GetProfileUseCase
+import ru.serzh272.norms.usecase.GetProfileUseCase
 import javax.inject.Inject
 
 @HiltViewModel

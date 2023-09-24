@@ -1,4 +1,4 @@
-package ru.serzh272.nfp.presentation.profile
+package ru.serzh272.norms
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
