@@ -7,7 +7,7 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 import ru.serzh272.data.local.database.entity.enums.ExerciseUnit
 import ru.serzh272.norms.model.ExerciseTypeDomain
-import java.util.Date
+import java.time.LocalDateTime
 
 @Entity(
     tableName = "exercise",
@@ -26,6 +26,6 @@ data class ExerciseEntity(
     @DrawableRes val icon: Int? = null,
     @ColumnInfo(defaultValue = "COUNT")
     val unit: ExerciseUnit = ExerciseUnit.COUNT,
-    val created: Date = Date(),
-    val updated: Date? = null
+    val created: LocalDateTime = LocalDateTime.now(),
+    val updated: LocalDateTime? = null
 )

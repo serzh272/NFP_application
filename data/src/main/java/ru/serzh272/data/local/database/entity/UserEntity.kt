@@ -6,7 +6,7 @@ import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import ru.serzh272.data.local.database.entity.enums.Gender
-import java.util.Date
+import java.time.LocalDate
 
 @Entity(
     tableName = "user",
@@ -25,7 +25,7 @@ data class UserEntity(
     @ColumnInfo(name = "group_id")
     val groupId: Long,
     @ColumnInfo(name = "birth_date")
-    val birthDate: Date,
+    val birthDate: LocalDate,
     val gender: Gender = Gender.MALE,
     val weight: Float,
 )

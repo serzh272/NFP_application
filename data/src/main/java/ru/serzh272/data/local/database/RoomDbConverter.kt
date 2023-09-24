@@ -1,17 +1,29 @@
 package ru.serzh272.data.local.database
 
 import androidx.room.TypeConverter
-import java.util.Date
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 internal class RoomDbConverter {
 
     @TypeConverter
-    fun dateFromLong(lngDate: Long?): Date? {
-        return lngDate?.let { Date(it) }
+    fun dateTimeFromString(strDate: String?): LocalDateTime? {
+        return strDate?.let { LocalDateTime.parse(strDate, DateTimeFormatter.ISO_LOCAL_DATE_TIME) }
     }
 
     @TypeConverter
-    fun longFromDate(date: Date?): Long? {
-        return date?.time
+    fun dateTimeToString(date: LocalDateTime?): String? {
+        return date?.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+    }
+
+    @TypeConverter
+    fun dateFromString(strDate: String?): LocalDate? {
+        return strDate?.let { LocalDate.parse(strDate, DateTimeFormatter.ISO_LOCAL_DATE) }
+    }
+
+    @TypeConverter
+    fun dateToString(date: LocalDate?): String? {
+        return date?.format(DateTimeFormatter.ISO_LOCAL_DATE)
     }
 }

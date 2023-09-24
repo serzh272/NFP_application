@@ -1,5 +1,6 @@
 plugins {
     id("nfp.android.library")
+    id("nfp.android.compose")
 }
 
 android {

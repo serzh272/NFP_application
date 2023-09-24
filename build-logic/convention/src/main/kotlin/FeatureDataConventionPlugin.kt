@@ -32,7 +32,7 @@ class FeatureDataConventionPlugin : Plugin<Project> {
                 apply("org.jetbrains.kotlin.kapt")
             }
             extensions.configure<LibraryExtension> {
-                compileSdk = 33
+                compileSdk = COMPILE_SDK_VERSION
                 namespace = "ru.serzh272.nfp.data.$name"
                 compileOptions {
                     sourceCompatibility = JavaVersion.VERSION_17

@@ -1,10 +1,10 @@
 package ru.serzh272.norms.mapper
 
 import ru.serzh272.data.local.database.entity.ExerciseEntity
-import ru.serzh272.norms.model.Exercise
+import ru.serzh272.norms.model.ExerciseDomain
 
-fun ExerciseEntity.toExercise(): Exercise {
-    return Exercise(
+fun ExerciseEntity.toExercise(): ExerciseDomain {
+    return ExerciseDomain(
         id = id,
         name = exerciseName,
         description = description,
@@ -12,7 +12,7 @@ fun ExerciseEntity.toExercise(): Exercise {
     )
 }
 
-fun Exercise.toExerciseEntity(): ExerciseEntity {
+fun ExerciseDomain.toExerciseEntity(): ExerciseEntity {
     return ExerciseEntity(
         id = id,
         exerciseName = name,

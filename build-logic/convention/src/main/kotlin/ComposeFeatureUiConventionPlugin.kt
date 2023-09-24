@@ -33,7 +33,7 @@ class ComposeFeatureUiConventionPlugin : Plugin<Project> {
                 apply("com.google.dagger.hilt.android")
             }
             extensions.configure<LibraryExtension> {
-                compileSdk = 33
+                compileSdk = COMPILE_SDK_VERSION
                 namespace = "ru.serzh272.nfp.ui.$name"
                 compileOptions {
                     sourceCompatibility = JavaVersion.VERSION_17

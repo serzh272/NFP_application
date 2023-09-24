@@ -1,7 +1,6 @@
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     id("nfp.android.application")
-    alias(libs.plugins.kotlin.kapt)
     alias(libs.plugins.dagger.hilt.android)
 }
 
@@ -33,7 +32,6 @@ dependencies {
 
     implementation(libs.hilt)
     implementation(libs.hiltComposeNavigation)
-    kapt(libs.hiltCompiler)
 
     testImplementation(libs.junit)
     testImplementation(libs.roomTesting)

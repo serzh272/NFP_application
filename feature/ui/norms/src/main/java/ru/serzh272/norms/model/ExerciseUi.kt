@@ -8,7 +8,7 @@ data class ExerciseUi(
     val iconRes: Int? = null
 ) {
     companion object {
-        fun Exercise.toExerciseUi(): ExerciseUi = ExerciseUi(
+        fun ExerciseDomain.toExerciseUi(): ExerciseUi = ExerciseUi(
             id = id,
             name = name,
             description = description,

@@ -13,11 +13,15 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
             with(pluginManager) {
                 apply("com.android.application")
                 apply("org.jetbrains.kotlin.android")
+                apply("org.jetbrains.kotlin.kapt")
             }
 
             extensions.configure<ApplicationExtension> {
                 configureKotlinAndroid(this)
-                defaultConfig.targetSdk = 33
+                defaultConfig.apply {
+                    targetSdk = TARGET_SDK_VERSION
+                    minSdk = MIN_SDK_VERSION
+                }
                 composeOptions {
                     kotlinCompilerExtensionVersion = libs.findVersion("composeUiVersion").get().toString()
                 }
@@ -53,6 +57,7 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
                     add("implementation", project(":feature:domain:norms"))
                     add("implementation", project(":core:ui"))
                     add("implementation", project(":core:common"))
+                    add("kapt", libs.findLibrary("hiltCompiler").get())
                 }
 
             }

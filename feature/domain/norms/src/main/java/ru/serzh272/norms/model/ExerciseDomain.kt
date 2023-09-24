@@ -1,7 +1,7 @@
 package ru.serzh272.norms.model
 
 
-data class Exercise(
+data class ExerciseDomain(
     val id: Long,
     val name: String,
     val description: String? = null,

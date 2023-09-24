@@ -44,5 +44,9 @@ gradlePlugin {
             id = "nfp.android.library"
             implementationClass = "AndroidLibraryConventionPlugin"
         }
+        register("androidCompose") {
+            id = "nfp.android.compose"
+            implementationClass = "ComposeConventionPlugin"
+        }
     }
 }

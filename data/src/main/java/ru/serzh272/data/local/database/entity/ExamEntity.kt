@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import java.util.Date
+import java.time.LocalDate
 
 @Entity(
     tableName = "exam",
@@ -23,6 +23,6 @@ data class ExamEntity(
     @ColumnInfo(name = "user_id")
     val userId: Long,
     @ColumnInfo(name = "exam_date")
-    val examDate: Date,
+    val examDate: LocalDate,
     val description: String? = null
 )

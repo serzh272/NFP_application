@@ -1,14 +1,14 @@
 package ru.serzh272.norms.model
 
-data class ExerciseWithResult(
-    val exercise: Exercise,
+class ExerciseWithResult(
+    val exercise: ExerciseDomain,
     val result: ExerciseResult
-){
+) {
 
-    sealed class ExerciseResult{
-        data class Count(val count: Int): ExerciseResult()
-        data class Time(val time: Long): ExerciseResult()
-        data class Distance(val distance: Int): ExerciseResult()
-        data class Mark(val mark: Int): ExerciseResult()
+    sealed class ExerciseResult {
+        class Count(val count: Int) : ExerciseResult()
+        class Time(val time: Long) : ExerciseResult()
+        class Distance(val distance: Int) : ExerciseResult()
+        class Mark(val mark: Int) : ExerciseResult()
     }
 }
