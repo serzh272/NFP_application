@@ -52,10 +52,7 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
 
                 dependencies {
                     add("implementation", project(":data"))
-                    add("implementation", project(":feature:ui:norms"))
-                    add("implementation", project(":feature:domain:norms"))
-                    add("implementation", project(":feature:ui:profile"))
-                    add("implementation", project(":feature:domain:profile"))
+                    add("implementation", project(":domain"))
                     add("implementation", project(":core:ui"))
                     add("implementation", project(":core:common"))
                     add("kapt", libs.findLibrary("hiltCompiler").get())

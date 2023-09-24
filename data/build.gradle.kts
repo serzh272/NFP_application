@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "ru.serzh272.data"
+    namespace = "ru.serzh272.nfp.data"
 
     defaultConfig {
 
@@ -32,6 +32,7 @@ dependencies {
 
     implementation(project(":feature:domain:norms"))
     implementation(project(":feature:domain:profile"))
+    implementation(project(":domain"))
 
     implementation(libs.androidCoreKtx)
 

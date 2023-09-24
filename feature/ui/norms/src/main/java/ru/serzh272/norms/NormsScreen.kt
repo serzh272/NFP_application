@@ -29,13 +29,15 @@ import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.flowlayout.FlowRow
 import ru.serzh272.common.constants.EMPTY_STRING
+import ru.serzh272.nfp.model.DomainDataHolder
+import ru.serzh272.nfp.model.ExerciseTypeDomain
+import ru.serzh272.nfp.theme.NFPTheme
 import ru.serzh272.nfp.ui.norms.R
 import ru.serzh272.norms.mapper.toExerciseType
-import ru.serzh272.norms.model.ExerciseTypeDomain
 import ru.serzh272.norms.model.ExerciseUi
 import ru.serzh272.norms.model.ExerciseUi.Companion.toExerciseUi
-import ru.serzh272.core.ui.R as CoreUiR
 import ru.serzh272.nfp.core.theme.R as ThemeR
+import ru.serzh272.nfp.core.ui.R as CoreUiR
 
 @Composable
 fun NormsScreen(modifier: Modifier = Modifier, normsViewModel: NormsViewModel = viewModel(), gridSpacing: Dp = 8.dp) {
@@ -234,7 +236,7 @@ fun ExerciseCard(modifier: Modifier, exercise: ExerciseUi, backgroundColor: Colo
 @Preview(device = Devices.PIXEL_4, showBackground = true, widthDp = 360, heightDp = 640)
 @Composable
 fun NormsScreenPreview() {
-    ru.serzh272.theme.NFPTheme {
+    NFPTheme {
         val exercises = DomainDataHolder.exercises.map { it.toExerciseUi() }
         NormsScreenContent(
             modifier = Modifier

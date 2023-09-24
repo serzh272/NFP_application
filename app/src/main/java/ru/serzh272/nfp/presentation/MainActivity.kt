@@ -33,6 +33,7 @@ import ru.serzh272.nfp.presentation.component.IMainViewModel
 import ru.serzh272.nfp.presentation.component.MainViewModel
 import ru.serzh272.nfp.presentation.component.RootNavHost
 import ru.serzh272.nfp.presentation.component.RootNavigation
+import ru.serzh272.nfp.theme.NFPTheme
 import ru.serzh272.nfp.core.theme.R as ThemeR
 
 @AndroidEntryPoint
@@ -49,7 +50,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            ru.serzh272.theme.NFPTheme {
+            NFPTheme {
                 MainScreen(viewModel = mainViewModel, navigationItems)
             }
         }
@@ -108,7 +109,7 @@ class MainActivity : ComponentActivity() {
     @Preview(showBackground = true)
     @Composable
     fun MainScreenPreview() {
-        ru.serzh272.theme.NFPTheme {
+        NFPTheme {
             MainScreen(viewModel = object : IMainViewModel {}, navigationItems)
         }
     }

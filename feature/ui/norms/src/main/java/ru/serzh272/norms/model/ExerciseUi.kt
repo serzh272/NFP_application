@@ -4,11 +4,11 @@ data class ExerciseUi(
     val id: Long,
     val name: String,
     val description: String? = null,
-    val exerciseTypeDomain: ExerciseTypeDomain,
+    val exerciseTypeDomain: ru.serzh272.nfp.model.ExerciseTypeDomain,
     val iconRes: Int? = null
 ) {
     companion object {
-        fun ExerciseDomain.toExerciseUi(): ExerciseUi = ExerciseUi(
+        fun ru.serzh272.nfp.model.ExerciseDomain.toExerciseUi(): ExerciseUi = ExerciseUi(
             id = id,
             name = name,
             description = description,

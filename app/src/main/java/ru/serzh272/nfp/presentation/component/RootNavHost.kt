@@ -8,23 +8,27 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import ru.serzh272.nfp.presentation.results.ResultsScreen
+import ru.serzh272.nfp.presentation.component.RootNavigation.Companion.HELP_ROUTE
+import ru.serzh272.nfp.presentation.component.RootNavigation.Companion.NORMS_ROUTE
+import ru.serzh272.nfp.presentation.component.RootNavigation.Companion.PROFILE_ROUTE
+import ru.serzh272.nfp.presentation.component.RootNavigation.Companion.RESULTS_ROUTE
+import ru.serzh272.nfp.profile.ProfileScreen
+import ru.serzh272.nfp.results.ResultsScreen
 import ru.serzh272.norms.NormsScreen
-import ru.serzh272.norms.ProfileScreen
 
 @Composable
-fun RootNavHost(modifier: Modifier = Modifier, navController: NavHostController, startDestination: String = "norms"){
-    NavHost(modifier = modifier, navController = navController, startDestination = startDestination){
-        composable("norms"){
+fun RootNavHost(modifier: Modifier = Modifier, navController: NavHostController, startDestination: String = NORMS_ROUTE) {
+    NavHost(modifier = modifier, navController = navController, startDestination = startDestination) {
+        composable(NORMS_ROUTE) {
             NormsScreen(modifier = Modifier.fillMaxSize(), hiltViewModel())
         }
-        composable("results"){
+        composable(RESULTS_ROUTE) {
             ResultsScreen(modifier = Modifier.fillMaxSize(), hiltViewModel())
         }
-        composable("profile"){
+        composable(PROFILE_ROUTE) {
             ProfileScreen(modifier = Modifier.fillMaxSize(), hiltViewModel())
         }
-        composable("help"){
+        composable(HELP_ROUTE) {
             Text(text = "help")
         }
     }

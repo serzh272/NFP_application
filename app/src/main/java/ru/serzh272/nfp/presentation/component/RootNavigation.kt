@@ -2,7 +2,7 @@ package ru.serzh272.nfp.presentation.component
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import ru.serzh272.core.ui.R as CoreUiR
+import ru.serzh272.nfp.core.ui.R as CoreUiR
 
 sealed class RootNavigation(val route: String, @DrawableRes val iconRes: Int, @StringRes val resourceId: Int) {
     object Norms: RootNavigation(NORMS_ROUTE, CoreUiR.drawable.ic_norms, CoreUiR.string.norms)

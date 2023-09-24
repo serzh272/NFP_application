@@ -4,4 +4,5 @@ plugins {
 
 dependencies {
     implementation(libs.accompanistFlowLayout)
+    implementation(project(":domain"))
 }

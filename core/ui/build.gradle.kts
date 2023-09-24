@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "ru.serzh272.core.ui"
+    namespace = "ru.serzh272.nfp.core.ui"
 
 }
 

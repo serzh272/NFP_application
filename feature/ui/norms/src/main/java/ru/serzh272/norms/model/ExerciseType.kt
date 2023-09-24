@@ -2,7 +2,7 @@ package ru.serzh272.norms.model
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import ru.serzh272.core.ui.R as CoreUiR
+import ru.serzh272.nfp.core.ui.R as CoreUiR
 
 enum class ExerciseType(@StringRes val humanizeNameRes: Int, @DrawableRes val iconRes: Int) {
     STRENGTH(CoreUiR.string.strength, CoreUiR.drawable.ic_strength),

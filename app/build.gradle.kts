@@ -17,6 +17,13 @@ android {
 
 dependencies {
 
+    implementation(project(":feature:ui:norms"))
+    implementation(project(":feature:domain:norms"))
+    implementation(project(":feature:ui:profile"))
+    implementation(project(":feature:domain:profile"))
+    implementation(project(":feature:ui:results"))
+    implementation(project(":feature:domain:results"))
+
     implementation(libs.androidCoreKtx)
     implementation(libs.lifecycleRuntimeKtx)
     implementation(libs.activityCompose)
