@@ -1,18 +1,21 @@
 package ru.serzh272.nfp.norms.model
 
+import ru.serzh272.nfp.model.ExerciseDomain
+import ru.serzh272.nfp.norms.mapper.toExerciseType
+
 data class ExerciseUi(
     val id: Long,
     val name: String,
     val description: String? = null,
-    val exerciseTypeDomain: ru.serzh272.nfp.model.ExerciseTypeDomain,
+    val exerciseType: ExerciseType,
     val iconRes: Int? = null
 ) {
     companion object {
-        fun ru.serzh272.nfp.model.ExerciseDomain.toExerciseUi(): ExerciseUi = ExerciseUi(
+        fun ExerciseDomain.toExerciseUi(): ExerciseUi = ExerciseUi(
             id = id,
             name = name,
             description = description,
-            exerciseTypeDomain = exerciseType,
+            exerciseType = exerciseType.toExerciseType(),
             iconRes = iconRes
         )
     }

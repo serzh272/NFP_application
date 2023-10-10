@@ -46,7 +46,7 @@ class NormsViewModel @Inject constructor(
                 state.searchQuery,
                 true
             )
-        }).let { res -> if (res.filter.isEmpty()) res else res.copy(exercises = res.exercises.filter { res.filter.contains(it.exerciseTypeDomain) }) }
+        }).let { res -> if (res.filter.isEmpty()) res else res.copy(exercises = res.exercises.filter { res.filter.contains(it.exerciseType) }) }
     }
 
     private fun handleItemSelection(item: ExerciseUi) {

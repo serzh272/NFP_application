@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
@@ -30,8 +31,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.flowlayout.FlowRow
 import ru.serzh272.common.constants.EMPTY_STRING
 import ru.serzh272.nfp.model.DomainDataHolder
-import ru.serzh272.nfp.model.ExerciseTypeDomain
-import ru.serzh272.nfp.norms.mapper.toExerciseType
+import ru.serzh272.nfp.norms.model.ExerciseType
 import ru.serzh272.nfp.norms.model.ExerciseUi
 import ru.serzh272.nfp.norms.model.ExerciseUi.Companion.toExerciseUi
 import ru.serzh272.nfp.norms.ui.R
@@ -111,8 +111,10 @@ fun NormsScreenContent(modifier: Modifier = Modifier, uiState: NormsScreenUiStat
                 horizontalArrangement = Arrangement.spacedBy(gridSpacing),
                 verticalArrangement = Arrangement.spacedBy(gridSpacing),
                 content = {
-                    items(uiState.exercises, key = { it.id }) { exercise ->
-                        val clickable = exercise.exerciseTypeDomain !in uiState.selectedExercises.map { it.exerciseTypeDomain } || exercise in uiState.selectedExercises
+
+                    item(span = { GridItemSpan(maxLineSpan) }) { Header(text = "test") }
+                    items(uiState.visibleExercises, key = { it.id },) { exercise ->
+                        val clickable = exercise.exerciseType !in uiState.selectedExercises.map { it.exerciseType } || exercise in uiState.selectedExercises
                         val clickableColor = if (exercise in uiState.selectedExercises) MaterialTheme.colors.secondary else MaterialTheme.colors.secondaryVariant
                         ExerciseCard(
                             modifier = Modifier
@@ -156,12 +158,12 @@ fun NormsScreenContent(modifier: Modifier = Modifier, uiState: NormsScreenUiStat
                     .padding(8.dp)
             ) {
                 Text(modifier = Modifier.fillMaxWidth(), text = stringResource(id = R.string.filter), textAlign = TextAlign.Center)
-                ExerciseTypeDomain.availableValues.forEach { type ->
+                ExerciseType.availableValues.forEach { type ->
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Checkbox(checked = uiState.filter.contains(type), onCheckedChange = { checked ->
                             command(NormsViewModel.NormsScreenCommand.ChangeUiState(uiState.copy(filter = if (checked) uiState.filter + type else uiState.filter - type)))
                         })
-                        Text(text = stringResource(id = type.toExerciseType().humanizeNameRes))
+                        Text(text = stringResource(id = type.humanizeNameRes))
                     }
                 }
 
@@ -206,7 +208,12 @@ private fun Chip(
 }
 
 @Composable
-fun ExerciseCard(modifier: Modifier, exercise: ExerciseUi, backgroundColor: Color) {
+fun Header(modifier: Modifier = Modifier, text: String) {
+    Text(text = "Test text", modifier = Modifier.fillMaxWidth())
+}
+
+@Composable
+fun ExerciseCard(modifier: Modifier = Modifier, exercise: ExerciseUi, backgroundColor: Color) {
     Card(
         modifier = modifier,
         backgroundColor = backgroundColor
