@@ -1,35 +1,40 @@
 package ru.serzh272.nfp.profile
 
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import ru.serzh272.common.constants.EMPTY_STRING
+import ru.serzh272.nfp.profile.model.UserFullInfo
 import ru.serzh272.nfp.profile.usecase.GetProfileUseCase
+import ru.serzh272.nfp.viewmodel.BaseViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     profileUseCase: GetProfileUseCase,
-) : ViewModel() {
-
-    private val _profileUiState: MutableStateFlow<ProfileScreenUiState> = MutableStateFlow(ProfileScreenUiState())
-    val profileUiState: StateFlow<ProfileScreenUiState> = _profileUiState
+) : BaseViewModel<ProfileViewModel.ViewState, ProfileViewModel.Action>(ViewState()) {
 
     init {
-        viewModelScope.launch(Dispatchers.IO) {
-            profileUseCase().collect{
-                setUiState(ProfileScreenUiState(it))
-            }
-        }
+        profileUseCase().onEach { userInfo ->
+            sendAction(Action.SetUserData(userInfo))
+        }.launchIn(viewModelScope)
     }
 
-    fun setUiState(state: ProfileScreenUiState){
-        _profileUiState.value = state
+    data class ViewState(
+        val error: Int = 0,
+        val userInfo: UserFullInfo = UserFullInfo(
+            id = 0,
+            category = null,
+            ageGroup = null,
+            userCategory = -1L to EMPTY_STRING
+        ),
+    ) : BaseViewState
+
+    sealed interface Action : BaseAction {
+        class SetUserData(val data: UserFullInfo) : Action
     }
 
     fun handleCommand(command: ProfileScreenCommand){
@@ -37,5 +42,11 @@ class ProfileViewModel @Inject constructor(
     }
 
     sealed class ProfileScreenCommand{
+    }
+
+    override fun onStateChanged(action: Action): ViewState {
+        return when(action) {
+            is Action.SetUserData -> state.copy(userInfo = action.data)
+        }
     }
 }

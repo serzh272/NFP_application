@@ -22,5 +22,5 @@ data class ExamExerciseXref(
     @ColumnInfo(name = "exercise_id")
     val exerciseId: Long,
     val result: Int,
-    val points: Int = 0
+    val points: Int? = null
 )

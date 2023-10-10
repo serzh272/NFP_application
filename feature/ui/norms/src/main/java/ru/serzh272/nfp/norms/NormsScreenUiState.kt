@@ -1,7 +1,7 @@
-package ru.serzh272.norms
+package ru.serzh272.nfp.norms
 
 import ru.serzh272.common.constants.EMPTY_STRING
-import ru.serzh272.norms.model.ExerciseUi
+import ru.serzh272.nfp.norms.model.ExerciseUi
 
 data class NormsScreenUiState(
     val exercises: List<ExerciseUi> = emptyList(),

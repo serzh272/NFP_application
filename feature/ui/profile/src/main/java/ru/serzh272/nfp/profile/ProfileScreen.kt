@@ -15,13 +15,13 @@ import ru.serzh272.nfp.theme.NFPTheme
 
 @Composable
 fun ProfileScreen(modifier: Modifier = Modifier, viewModel: ProfileViewModel = viewModel()) {
-    val uiState by viewModel.profileUiState.collectAsState()
+    val uiState by viewModel.stateFlow.collectAsState()
 
     ProfileScreenContent(modifier, uiState, viewModel::handleCommand)
 }
 
 @Composable
-fun ProfileScreenContent(modifier: Modifier = Modifier, uiState: ProfileScreenUiState, command: (ProfileViewModel.ProfileScreenCommand) -> Unit) {
+fun ProfileScreenContent(modifier: Modifier = Modifier, uiState: ProfileViewModel.ViewState, command: (ProfileViewModel.ProfileScreenCommand) -> Unit) {
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text(text = uiState.userInfo.toString())
@@ -35,7 +35,7 @@ fun NProfileScreenPreview() {
         ProfileScreenContent(
             modifier = Modifier
                 .fillMaxSize(),
-            uiState = ProfileScreenUiState(),
+            uiState = ProfileViewModel.ViewState(),
             command = {},
         )
     }

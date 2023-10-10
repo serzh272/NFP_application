@@ -1,4 +1,4 @@
-package ru.serzh272.norms
+package ru.serzh272.nfp.norms
 
 import android.util.Log
 import androidx.lifecycle.SavedStateHandle
@@ -11,9 +11,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import ru.serzh272.nfp.norms.model.ExerciseUi
+import ru.serzh272.nfp.norms.model.ExerciseUi.Companion.toExerciseUi
 import ru.serzh272.nfp.norms.usecase.GetExercisesUseCase
-import ru.serzh272.norms.model.ExerciseUi
-import ru.serzh272.norms.model.ExerciseUi.Companion.toExerciseUi
 import javax.inject.Inject
 
 @HiltViewModel

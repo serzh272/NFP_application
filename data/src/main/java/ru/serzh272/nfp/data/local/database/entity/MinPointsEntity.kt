@@ -2,6 +2,7 @@ package ru.serzh272.nfp.data.local.database.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import ru.serzh272.nfp.enums.Gender
@@ -11,6 +12,22 @@ import ru.serzh272.nfp.enums.Gender
     indices = [
         Index("id", unique = true),
         Index("age_group_id", "user_category_id", "gender", unique = true),
+    ],
+    foreignKeys = [
+        ForeignKey(
+            entity = UserCategoryEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["user_category_id"],
+            onDelete = ForeignKey.CASCADE,
+            onUpdate = ForeignKey.CASCADE
+        ),
+        ForeignKey(
+            entity = AgeGroupEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["age_group_id"],
+            onDelete = ForeignKey.SET_NULL,
+            onUpdate = ForeignKey.CASCADE
+        )
     ]
 )
 data class MinPointsEntity(

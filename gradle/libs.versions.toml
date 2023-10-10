@@ -9,7 +9,7 @@ junitExt = "1.1.5"
 navigation = "2.6.0"
 espresso = "3.5.1"
 flowlayout = "0.28.0"
-lifecycle = "2.6.1"
+lifecycle = "2.6.2"
 androidCoreKtx = "1.10.1"
 activityCompose = "1.7.2"
 hiltNavigationCompose = "1.0.0"
@@ -21,6 +21,7 @@ coroutines = "1.7.3"
 androidCoreKtx = { group = "androidx.core", name = "core-ktx", version.ref = "androidCoreKtx" }
 coroutinesCore = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
 lifecycleRuntimeKtx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle" }
+lifecycleViewmodelKtx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version = "lifecycle" }
 activityCompose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
 roomRuntime = { group = "androidx.room", name = "room-runtime", version.ref = "roomVersion" }
 roomCompiler = { group = "androidx.room", name = "room-compiler", version.ref = "roomVersion" }

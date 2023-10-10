@@ -5,4 +5,5 @@ plugins {
 dependencies {
 
     testImplementation(libs.junit)
+    implementation(libs.coroutinesCore)
 }

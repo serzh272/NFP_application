@@ -1,4 +1,4 @@
-package ru.serzh272.norms.model
+package ru.serzh272.nfp.norms.model
 
 data class ExerciseUi(
     val id: Long,

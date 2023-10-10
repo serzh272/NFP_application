@@ -1,6 +1,6 @@
-package ru.serzh272.norms.mapper
+package ru.serzh272.nfp.norms.mapper
 
-import ru.serzh272.norms.model.ExerciseType
+import ru.serzh272.nfp.norms.model.ExerciseType
 
 
 fun ru.serzh272.nfp.model.ExerciseTypeDomain.toExerciseType(): ExerciseType = when(this) {

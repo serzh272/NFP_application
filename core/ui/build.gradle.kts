@@ -14,6 +14,9 @@ dependencies {
     api(project(":core:theme"))
     implementation(libs.androidCoreKtx)
 
+    implementation(libs.lifecycleRuntimeKtx)
+    implementation(libs.lifecycleViewmodelKtx)
+
     implementation(libs.composeUi)
     implementation(libs.composePreview)
     implementation(libs.composeMaterial)

@@ -15,12 +15,19 @@ import java.time.LocalDate
         Index("group_id", unique = false),
     ],
     foreignKeys = [
-        ForeignKey(GroupEntity::class, parentColumns = ["id"], childColumns = ["group_id"]),
+        ForeignKey(
+            GroupEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["group_id"],
+            onDelete = ForeignKey.CASCADE,
+            onUpdate = ForeignKey.CASCADE
+        ),
     ]
 )
 data class UserEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Long,
+    @ColumnInfo(defaultValue = "''")
     val name: String = "",
     @ColumnInfo(name = "group_id")
     val groupId: Long,
