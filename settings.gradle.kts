@@ -15,12 +15,12 @@ dependencyResolutionManagement {
 }
 rootProject.name = "NFP"
 include(":app")
-include(":feature:domain:norms")
-include(":feature:ui:norms")
-include(":feature:domain:profile")
-include(":feature:ui:profile")
-include(":feature:domain:results")
-include(":feature:ui:results")
+include(":feature:norms:domain")
+include(":feature:norms:ui")
+include(":feature:profile:domain")
+include(":feature:profile:ui")
+include(":feature:results:domain")
+include(":feature:results:ui")
 include(":data")
 include(":domain")
 include(":core:common")

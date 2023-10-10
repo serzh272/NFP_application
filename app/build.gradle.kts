@@ -17,12 +17,12 @@ android {
 
 dependencies {
 
-    implementation(project(":feature:ui:norms"))
-    implementation(project(":feature:domain:norms"))
-    implementation(project(":feature:ui:profile"))
-    implementation(project(":feature:domain:profile"))
-    implementation(project(":feature:ui:results"))
-    implementation(project(":feature:domain:results"))
+    implementation(project(":feature:norms:ui"))
+    implementation(project(":feature:norms:domain"))
+    implementation(project(":feature:profile:ui"))
+    implementation(project(":feature:profile:domain"))
+    implementation(project(":feature:results:ui"))
+    implementation(project(":feature:results:domain"))
 
     implementation(libs.androidCoreKtx)
     implementation(libs.lifecycleRuntimeKtx)

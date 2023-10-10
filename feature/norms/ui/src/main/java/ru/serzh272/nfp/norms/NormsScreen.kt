@@ -34,8 +34,8 @@ import ru.serzh272.nfp.model.ExerciseTypeDomain
 import ru.serzh272.nfp.norms.mapper.toExerciseType
 import ru.serzh272.nfp.norms.model.ExerciseUi
 import ru.serzh272.nfp.norms.model.ExerciseUi.Companion.toExerciseUi
+import ru.serzh272.nfp.norms.ui.R
 import ru.serzh272.nfp.theme.NFPTheme
-import ru.serzh272.nfp.ui.norms.R
 import ru.serzh272.nfp.core.theme.R as ThemeR
 import ru.serzh272.nfp.core.ui.R as CoreUiR
 

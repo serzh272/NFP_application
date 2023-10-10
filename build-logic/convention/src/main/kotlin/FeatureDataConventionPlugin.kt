@@ -33,7 +33,8 @@ class FeatureDataConventionPlugin : Plugin<Project> {
             }
             extensions.configure<LibraryExtension> {
                 compileSdk = COMPILE_SDK_VERSION
-                namespace = "ru.serzh272.nfp.data.$name"
+                val featureName = path.split(":").getOrElse(2){ "feature" }
+                namespace = "ru.serzh272.nfp.$featureName.data"
                 compileOptions {
                     sourceCompatibility = JavaVersion.VERSION_17
                     targetCompatibility = JavaVersion.VERSION_17
@@ -53,7 +54,7 @@ class FeatureDataConventionPlugin : Plugin<Project> {
                 dependencies {
                     add("implementation", project(":data"))
                     add("implementation", project(":core:common"))
-                    add("implementation", project(path.replace("data:$name", "domain:$name")))
+                    add("implementation", project(path.replace("$featureName:data", "$featureName:domain")))
                     add("implementation", libs.findLibrary("hilt").get())
                     add("kapt", libs.findLibrary("hiltCompiler").get())
                     add("testImplementation", libs.findLibrary("junit").get())

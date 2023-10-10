@@ -34,7 +34,8 @@ class ComposeFeatureUiConventionPlugin : Plugin<Project> {
             }
             extensions.configure<LibraryExtension> {
                 compileSdk = COMPILE_SDK_VERSION
-                namespace = "ru.serzh272.nfp.ui.$name"
+                val featureName = path.split(":").getOrElse(2){ "feature" }
+                namespace = "ru.serzh272.nfp.$featureName.ui"
                 compileOptions {
                     sourceCompatibility = JavaVersion.VERSION_17
                     targetCompatibility = JavaVersion.VERSION_17
@@ -51,7 +52,7 @@ class ComposeFeatureUiConventionPlugin : Plugin<Project> {
                 dependencies {
                     add("implementation", project(":core:ui"))
                     add("implementation", project(":core:common"))
-                    add("implementation", project(path.replace("ui:$name", "domain:$name")))
+                    add("implementation", project(path.replace("$featureName:ui", "$featureName:domain")))
                     add("implementation", libs.findLibrary("composeUi").get())
                     add("implementation", libs.findLibrary("composePreview").get())
                     add("implementation", libs.findLibrary("composeMaterial").get())
