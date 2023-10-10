@@ -111,29 +111,31 @@ fun NormsScreenContent(modifier: Modifier = Modifier, uiState: NormsScreenUiStat
                 horizontalArrangement = Arrangement.spacedBy(gridSpacing),
                 verticalArrangement = Arrangement.spacedBy(gridSpacing),
                 content = {
-
-                    item(span = { GridItemSpan(maxLineSpan) }) { Header(text = "test") }
-                    items(uiState.visibleExercises, key = { it.id },) { exercise ->
-                        val clickable = exercise.exerciseType !in uiState.selectedExercises.map { it.exerciseType } || exercise in uiState.selectedExercises
-                        val clickableColor = if (exercise in uiState.selectedExercises) MaterialTheme.colors.secondary else MaterialTheme.colors.secondaryVariant
-                        ExerciseCard(
-                            modifier = Modifier
-                                .size(96.dp, 112.dp)
-                                .combinedClickable(onLongClick = {
-                                    if (!clickable) return@combinedClickable
-                                    if (!uiState.selectionMode) {
-                                        command(NormsViewModel.NormsScreenCommand.ChangeUiState(uiState.copy(selectionMode = true, selectedExercises = setOf(exercise))))
-                                    } else {
-                                        command(NormsViewModel.NormsScreenCommand.SelectItem(exercise))
+                    uiState.exercises.forEach { entry ->
+                        item(span = { GridItemSpan(maxLineSpan) }) { Header(text = stringResource(id = entry.key.humanizeNameRes)) }
+                        items(entry.value, key = { it.id },) { exercise ->
+                            val selected = exercise.exerciseType !in uiState.selectedExercises.map { it.exerciseType } || exercise in uiState.selectedExercises
+                            val clickableColor = if (exercise in uiState.selectedExercises) MaterialTheme.colors.secondary else MaterialTheme.colors.secondaryVariant
+                            ExerciseCard(
+                                modifier = Modifier
+                                    .size(96.dp, 112.dp)
+                                    .combinedClickable(onLongClick = {
+                                        if (!selected) return@combinedClickable
+                                        if (!uiState.selectionMode) {
+                                            command(NormsViewModel.NormsScreenCommand.ChangeUiState(uiState.copy(selectionMode = true, selectedExercises = setOf(exercise))))
+                                        } else {
+                                            command(NormsViewModel.NormsScreenCommand.SelectItem(exercise))
+                                        }
+                                    }) {
+                                        if (uiState.selectionMode && selected) command(NormsViewModel.NormsScreenCommand.SelectItem(exercise))
                                     }
-                                }) {
-                                    if (uiState.selectionMode && clickable) command(NormsViewModel.NormsScreenCommand.SelectItem(exercise))
-                                }
-                                .animateItemPlacement(),
-                            exercise = exercise,
-                            backgroundColor = if (clickable) clickableColor else colorResource(id = ThemeR.color.silver_sand)
-                        )
+                                    .animateItemPlacement(),
+                                exercise = exercise,
+                                backgroundColor = if (selected) clickableColor else colorResource(id = ThemeR.color.silver_sand)
+                            )
+                        }
                     }
+
                 })
         }
         if (uiState.selectedExercises.isNotEmpty()) {
@@ -209,7 +211,7 @@ private fun Chip(
 
 @Composable
 fun Header(modifier: Modifier = Modifier, text: String) {
-    Text(text = "Test text", modifier = Modifier.fillMaxWidth())
+    Text(text = text, modifier = Modifier.fillMaxWidth())
 }
 
 @Composable
@@ -244,12 +246,12 @@ fun ExerciseCard(modifier: Modifier = Modifier, exercise: ExerciseUi, background
 @Composable
 fun NormsScreenPreview() {
     NFPTheme {
-        val exercises = DomainDataHolder.exercises.map { it.toExerciseUi() }
+        val exercises = DomainDataHolder.exercises.map { it.toExerciseUi() }.groupBy { it.exerciseType }
         NormsScreenContent(
             modifier = Modifier
                 .fillMaxSize(),
             gridSpacing = 8.dp,
-            uiState = NormsScreenUiState(exercises = exercises, selectedExercises = exercises.take(2).toSet()),
+            uiState = NormsScreenUiState(exercises = exercises, selectedExercises = DomainDataHolder.exercises.map { it.toExerciseUi() }.take(2).toSet()),
             command = {},
         )
     }

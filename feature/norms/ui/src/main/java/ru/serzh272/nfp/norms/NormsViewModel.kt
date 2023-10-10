@@ -35,18 +35,23 @@ class NormsViewModel @Inject constructor(
                 allExercises = it
                 val selectedExercises = normsUiState.value.selectedExercises.intersect(allExercises.toSet())
                 val selectionMode = selectedExercises.isNotEmpty()
-                setUiState(normsUiState.value.copy(exercises = allExercises, selectedExercises = selectedExercises, selectionMode = selectionMode))
+                setUiState(normsUiState.value.copy(exercises = allExercises.groupBy { exercise -> exercise.exerciseType }, selectedExercises = selectedExercises, selectionMode = selectionMode))
             }
         }
     }
 
     fun setUiState(state: NormsScreenUiState) {
-        _normsUiState.value = state.copy(exercises = if (state.searchQuery.isBlank()) allExercises else allExercises.filter {
+        val filtered = (if (state.searchQuery.isBlank()) allExercises else allExercises.filter {
             it.name.contains(
                 state.searchQuery,
                 true
             )
-        }).let { res -> if (res.filter.isEmpty()) res else res.copy(exercises = res.exercises.filter { res.filter.contains(it.exerciseType) }) }
+        }).run { takeIf { state.filter.isEmpty() } ?: filter { state.filter.contains(it.exerciseType) } }
+            .filter { exercise ->
+                exercise.exerciseType !in state.selectedExercises.map { it.exerciseType } || exercise in state.selectedExercises
+            }
+        val grouped = filtered.groupBy { it.exerciseType }
+        _normsUiState.value = state.copy(exercises = grouped)
     }
 
     private fun handleItemSelection(item: ExerciseUi) {
@@ -68,7 +73,7 @@ class NormsViewModel @Inject constructor(
     }
 
     private fun handleAddToComplex(exercises: Set<ExerciseUi>) {
-        setUiState(NormsScreenUiState(allExercises))
+        setUiState(NormsScreenUiState(allExercises.groupBy { it.exerciseType }))
         Log.d("M_NormsViewModel", "$exercises")
     }
 
