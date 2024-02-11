@@ -13,7 +13,7 @@ class ComposeConventionPlugin : Plugin<Project> {
                 configureKotlinAndroid(this)
 
                 composeOptions {
-                    kotlinCompilerExtensionVersion = libs.findVersion("composeUiVersion").get().toString()
+                    kotlinCompilerExtensionVersion = libs.findVersion("composeCompiler").get().toString()
                 }
 
                 buildFeatures {

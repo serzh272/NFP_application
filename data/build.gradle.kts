@@ -1,7 +1,6 @@
-@Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
     id("nfp.android.library")
-    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -37,10 +36,10 @@ dependencies {
     implementation(libs.androidCoreKtx)
 
     api(libs.bundles.room)
-    kapt (libs.roomCompiler)
+    ksp(libs.roomCompiler)
 
     implementation(libs.hilt)
-    kapt(libs.hiltCompiler)
+    ksp(libs.hiltCompiler)
     testImplementation(libs.junit)
     androidTestImplementation(libs.junitExt)
     androidTestImplementation(libs.espressoCore)

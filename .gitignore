@@ -21,3 +21,4 @@ local.properties
 /.editorconfig
 /build-logic/build/
 /build-logic/convention/build/
+/keystore.properties

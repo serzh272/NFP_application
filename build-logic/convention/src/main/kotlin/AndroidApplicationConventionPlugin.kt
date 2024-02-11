@@ -5,6 +5,9 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
+import java.io.File
+import java.io.FileInputStream
+import java.util.Properties
 
 @Suppress("MagicNumber")
 class AndroidApplicationConventionPlugin : Plugin<Project> {
@@ -13,7 +16,7 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
             with(pluginManager) {
                 apply("com.android.application")
                 apply("org.jetbrains.kotlin.android")
-                apply("org.jetbrains.kotlin.kapt")
+                apply("com.google.devtools.ksp")
             }
 
             extensions.configure<ApplicationExtension> {
@@ -23,17 +26,42 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
                     minSdk = MIN_SDK_VERSION
                 }
                 composeOptions {
-                    kotlinCompilerExtensionVersion = libs.findVersion("composeUiVersion").get().toString()
+                    kotlinCompilerExtensionVersion = libs.findVersion("composeCompiler").get().toString()
+                }
+                val keystorePropertiesFile = rootProject.file("keystore.properties")
+                val keystoreProperties = Properties()
+                keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+                signingConfigs {
+                    create("release") {
+                        storeFile = file(keystoreProperties["storeFile"] as String)
+                        keyPassword = keystoreProperties["keyPassword"] as String
+                        keyAlias = keystoreProperties["keyAlias"] as String
+                        storePassword = keystoreProperties["storePassword"] as String
+                    }
                 }
 
                 buildFeatures {
                     compose = true
                 }
+                flavorDimensions += listOf("mode")
+                productFlavors {
+                    create("demo") {
+                        dimension = "mode"
+                        applicationIdSuffix = ".demo"
+                    }
+                    create("full") {
+                        dimension = "mode"
+                    }
+                }
 
                 buildTypes {
                     getByName("release") {
+                        signingConfig = signingConfigs.getByName("release")
                         isMinifyEnabled = true
                         proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+                    }
+                    getByName("debug") {
+                        applicationIdSuffix = ".dev"
                     }
                 }
                 defaultConfig {
@@ -55,9 +83,8 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
                     add("implementation", project(":domain"))
                     add("implementation", project(":core:ui"))
                     add("implementation", project(":core:common"))
-                    add("kapt", libs.findLibrary("hiltCompiler").get())
+                    add("ksp", libs.findLibrary("hiltCompiler").get())
                 }
-
             }
         }
     }

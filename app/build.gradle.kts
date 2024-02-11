@@ -1,4 +1,3 @@
-@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     id("nfp.android.application")
     alias(libs.plugins.dagger.hilt.android)
@@ -29,13 +28,12 @@ dependencies {
     implementation(libs.activityCompose)
 
     implementation(libs.bundles.room)
-    kapt (libs.roomCompiler)
+    ksp(libs.roomCompiler)
 
     implementation(libs.composeUi)
     implementation(libs.composePreview)
     implementation(libs.composeNavigation)
     implementation(libs.composeMaterial)
-    implementation(libs.accompanistFlowLayout)
 
     implementation(libs.hilt)
     implementation(libs.hiltComposeNavigation)
@@ -47,8 +45,4 @@ dependencies {
     androidTestImplementation(libs.junitUi)
     debugImplementation(libs.debugComposeUiTooling)
     debugImplementation(libs.debugComposeUiTestManifest)
-}
-
-kapt {
-    correctErrorTypes = true
 }

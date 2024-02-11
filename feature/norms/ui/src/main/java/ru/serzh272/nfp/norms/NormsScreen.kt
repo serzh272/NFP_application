@@ -50,6 +50,9 @@ fun NormsScreen(modifier: Modifier = Modifier, normsViewModel: NormsViewModel = 
 @Composable
 fun NormsScreenContent(modifier: Modifier = Modifier, uiState: NormsScreenUiState, gridSpacing: Dp, command: (NormsViewModel.NormsScreenCommand) -> Unit) {
     val lazyGridState = rememberLazyGridState()
+    val isFilterApplied = remember(uiState.filter) {
+        derivedStateOf(uiState.filter::isEmpty)
+    }
     Box(modifier = modifier) {
         Column(modifier = Modifier.fillMaxSize()) {
             Row(
@@ -81,8 +84,8 @@ fun NormsScreenContent(modifier: Modifier = Modifier, uiState: NormsScreenUiStat
                 IconButton(onClick = { command(NormsViewModel.NormsScreenCommand.ChangeUiState(uiState.copy(filterDialogShow = true))) }) {
                     Icon(
                         imageVector = ImageVector.vectorResource(id = CoreUiR.drawable.ic_filter),
-                        contentDescription = "",
-                        tint = if (uiState.filter.isEmpty()) MaterialTheme.colors.primary else colorResource(id = ThemeR.color.spanish_orange)
+                        contentDescription = null,
+                        tint = if (isFilterApplied.value) MaterialTheme.colors.primary else colorResource(id = ThemeR.color.spanish_orange)
                     )
                 }
             }

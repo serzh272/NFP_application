@@ -1,9 +1,11 @@
 package ru.serzh272.nfp.norms
 
+import androidx.compose.runtime.Stable
 import ru.serzh272.common.constants.EMPTY_STRING
 import ru.serzh272.nfp.norms.model.ExerciseType
 import ru.serzh272.nfp.norms.model.ExerciseUi
 
+@Stable
 data class NormsScreenUiState(
     val exercises: Map<ExerciseType, List<ExerciseUi>> = emptyMap(),
     val selectionMode: Boolean = false,

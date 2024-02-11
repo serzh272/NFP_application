@@ -29,7 +29,7 @@ class ComposeFeatureUiConventionPlugin : Plugin<Project> {
             with(pluginManager) {
                 apply("com.android.library")
                 apply("org.jetbrains.kotlin.android")
-                apply("org.jetbrains.kotlin.kapt")
+                apply("com.google.devtools.ksp")
                 apply("com.google.dagger.hilt.android")
             }
             extensions.configure<LibraryExtension> {
@@ -42,7 +42,7 @@ class ComposeFeatureUiConventionPlugin : Plugin<Project> {
                 }
 
                 composeOptions {
-                    kotlinCompilerExtensionVersion = libs.findVersion("composeUiVersion").get().toString()
+                    kotlinCompilerExtensionVersion = libs.findVersion("composeCompiler").get().toString()
                 }
 
                 buildFeatures {
@@ -57,7 +57,7 @@ class ComposeFeatureUiConventionPlugin : Plugin<Project> {
                     add("implementation", libs.findLibrary("composePreview").get())
                     add("implementation", libs.findLibrary("composeMaterial").get())
                     add("implementation", libs.findLibrary("hilt").get())
-                    add("kapt", libs.findLibrary("hiltCompiler").get())
+                    add("ksp", libs.findLibrary("hiltCompiler").get())
                     add("implementation", libs.findLibrary("composeNavigation").get())
                     add("testImplementation", libs.findLibrary("junit").get())
                     add("androidTestImplementation", libs.findLibrary("junitExt").get())

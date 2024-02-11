@@ -16,7 +16,6 @@ import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.colorResource
@@ -64,7 +63,7 @@ class MainActivity : ComponentActivity() {
         val navController = rememberNavController()
         Scaffold(scaffoldState = scaffoldState,
             bottomBar = {
-                BottomNavigation(backgroundColor = Color.White) {
+                BottomNavigation {
                     val navBackStackEntry by navController.currentBackStackEntryAsState()
                     val currentDestination = navBackStackEntry?.destination
                     navigationItems.forEach { screen ->

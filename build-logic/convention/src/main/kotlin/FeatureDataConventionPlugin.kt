@@ -29,7 +29,7 @@ class FeatureDataConventionPlugin : Plugin<Project> {
             with(pluginManager) {
                 apply("com.android.library")
                 apply("org.jetbrains.kotlin.android")
-                apply("org.jetbrains.kotlin.kapt")
+                apply("com.google.devtools.ksp")
             }
             extensions.configure<LibraryExtension> {
                 compileSdk = COMPILE_SDK_VERSION
@@ -56,7 +56,7 @@ class FeatureDataConventionPlugin : Plugin<Project> {
                     add("implementation", project(":core:common"))
                     add("implementation", project(path.replace("$featureName:data", "$featureName:domain")))
                     add("implementation", libs.findLibrary("hilt").get())
-                    add("kapt", libs.findLibrary("hiltCompiler").get())
+                    add("ksp", libs.findLibrary("hiltCompiler").get())
                     add("testImplementation", libs.findLibrary("junit").get())
                     add("androidTestImplementation", libs.findLibrary("junitExt").get())
                 }
