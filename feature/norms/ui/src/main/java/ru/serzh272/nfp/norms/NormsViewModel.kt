@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import ru.serzh272.nfp.norms.model.ExerciseUi
 import ru.serzh272.nfp.norms.model.ExerciseUi.Companion.toExerciseUi
@@ -26,7 +27,7 @@ class NormsViewModel @Inject constructor(
 
     private val exercisesFlow: Flow<List<ExerciseUi>> = getExercisesUseCase().map { exercises -> exercises.map { exercise -> exercise.toExerciseUi() } }
 
-    private val _normsUiState: MutableStateFlow<NormsScreenUiState> = MutableStateFlow(NormsScreenUiState())
+    private val _normsUiState: MutableStateFlow<NormsScreenUiState> = MutableStateFlow(NormsScreenUiState.EMPTY)
     val normsUiState: StateFlow<NormsScreenUiState> = _normsUiState
 
     init {
@@ -48,7 +49,8 @@ class NormsViewModel @Inject constructor(
             )
         }).run { takeIf { state.filter.isEmpty() } ?: filter { state.filter.contains(it.exerciseType) } }
             .filter { exercise ->
-                exercise.exerciseType !in state.selectedExercises.map { it.exerciseType } || exercise in state.selectedExercises
+                exercise.exerciseType !in state.selectedExercises.map { it.exerciseType } ||
+                    exercise in state.selectedExercises
             }
         val grouped = filtered.groupBy { it.exerciseType }
         _normsUiState.value = state.copy(exercises = grouped)
@@ -59,7 +61,15 @@ class NormsViewModel @Inject constructor(
             if (item in selectedExercises && selectedExercises.size == 1 || selectedExercises.isEmpty()) {
                 setUiState(copy(selectionMode = false, selectedExercises = emptySet()))
             } else {
-                setUiState(copy(selectedExercises = if (item in selectedExercises) selectedExercises - item else selectedExercises + item))
+                setUiState(
+                    copy(
+                        selectedExercises = if (item in selectedExercises) {
+                            selectedExercises - item
+                        } else {
+                            selectedExercises + item
+                        }
+                    )
+                )
             }
         }
     }
@@ -73,8 +83,7 @@ class NormsViewModel @Inject constructor(
     }
 
     private fun handleAddToComplex(exercises: Set<ExerciseUi>) {
-        setUiState(NormsScreenUiState(allExercises.groupBy { it.exerciseType }))
-        Log.d("M_NormsViewModel", "$exercises")
+        _normsUiState.update { NormsScreenUiState.EMPTY.copy(exercises = allExercises.groupBy { it.exerciseType }) }
     }
 
     sealed class NormsScreenCommand {

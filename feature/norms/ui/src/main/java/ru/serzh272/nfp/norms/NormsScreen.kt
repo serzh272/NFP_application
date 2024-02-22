@@ -34,7 +34,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -54,10 +53,12 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.flowlayout.FlowRow
 import ru.serzh272.common.constants.EMPTY_STRING
 import ru.serzh272.nfp.model.DomainDataHolder
+import ru.serzh272.nfp.norms.NormsViewModel.NormsScreenCommand.AddToComplex
+import ru.serzh272.nfp.norms.NormsViewModel.NormsScreenCommand.ChangeUiState
+import ru.serzh272.nfp.norms.NormsViewModel.NormsScreenCommand.SelectItem
 import ru.serzh272.nfp.norms.model.ExerciseType
 import ru.serzh272.nfp.norms.model.ExerciseUi
 import ru.serzh272.nfp.norms.model.ExerciseUi.Companion.toExerciseUi
@@ -66,15 +67,23 @@ import ru.serzh272.nfp.theme.NFPTheme
 import ru.serzh272.nfp.core.ui.R as CoreUiR
 
 @Composable
-fun NormsScreen(modifier: Modifier = Modifier, normsViewModel: NormsViewModel = viewModel(), gridSpacing: Dp = 8.dp) {
-    val uiState by normsViewModel.normsUiState.collectAsState()
-
-    NormsScreenContent(modifier, uiState, gridSpacing, normsViewModel::handleCommand)
+fun NormsScreen(
+    modifier: Modifier = Modifier,
+    uiState: NormsScreenUiState = NormsScreenUiState.EMPTY,
+    gridSpacing: Dp = 8.dp,
+    command: (NormsViewModel.NormsScreenCommand) -> Unit = { }
+) {
+    NormsScreenContent(modifier, uiState, gridSpacing, command)
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun NormsScreenContent(modifier: Modifier = Modifier, uiState: NormsScreenUiState, gridSpacing: Dp, command: (NormsViewModel.NormsScreenCommand) -> Unit) {
+fun NormsScreenContent(
+    modifier: Modifier = Modifier,
+    uiState: NormsScreenUiState,
+    gridSpacing: Dp,
+    command: (NormsViewModel.NormsScreenCommand) -> Unit
+) {
     val lazyGridState = rememberLazyGridState()
     val isFilterApplied = remember(uiState.filter) {
         derivedStateOf(uiState.filter::isEmpty)
@@ -94,7 +103,13 @@ fun NormsScreenContent(modifier: Modifier = Modifier, uiState: NormsScreenUiStat
                     value = uiState.searchQuery,
                     trailingIcon = if (uiState.searchQuery.isNotBlank()) {
                         {
-                            IconButton(onClick = { command(NormsViewModel.NormsScreenCommand.ChangeUiState(uiState.copy(searchQuery = ""))) }) {
+                            IconButton(onClick = {
+                                command(
+                                    ChangeUiState(
+                                        uiState.copy(searchQuery = "")
+                                    )
+                                )
+                            }) {
                                 Icon(
                                     imageVector = ImageVector.vectorResource(id = CoreUiR.drawable.ic_close_24),
                                     contentDescription = stringResource(id = R.string.search)
@@ -105,13 +120,21 @@ fun NormsScreenContent(modifier: Modifier = Modifier, uiState: NormsScreenUiStat
                     singleLine = true,
                     label = { Text(text = stringResource(id = R.string.search)) },
                     onValueChange = {
-                        command(NormsViewModel.NormsScreenCommand.ChangeUiState(uiState.copy(searchQuery = it)))
+                        command(ChangeUiState(uiState.copy(searchQuery = it)))
                     })
-                IconButton(onClick = { command(NormsViewModel.NormsScreenCommand.ChangeUiState(uiState.copy(filterDialogShow = true))) }) {
+                IconButton(
+                    onClick = {
+                        command(ChangeUiState(uiState.copy(filterDialogShow = true)))
+                    }
+                ) {
                     Icon(
                         imageVector = ImageVector.vectorResource(id = CoreUiR.drawable.ic_filter),
                         contentDescription = null,
-                        tint = if (isFilterApplied.value) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.tertiary
+                        tint = if (isFilterApplied.value) {
+                            MaterialTheme.colorScheme.primary
+                        } else {
+                            MaterialTheme.colorScheme.tertiary
+                        }
                     )
                 }
             }
@@ -127,9 +150,11 @@ fun NormsScreenContent(modifier: Modifier = Modifier, uiState: NormsScreenUiStat
                             .height(40.dp), shape = RoundedCornerShape(50)
                     ) {
                         Chip(stringResource(id = CoreUiR.string.exercise, " ${it.id}"),
-                            leadingIcon = ImageVector.vectorResource(id = it.iconRes ?: CoreUiR.drawable.ic_image_placeholder),
+                            leadingIcon = ImageVector.vectorResource(
+                                id = it.iconRes ?: CoreUiR.drawable.ic_image_placeholder
+                            ),
                             trailingIcon = ImageVector.vectorResource(id = CoreUiR.drawable.ic_close_24),
-                            onTrailingIconClick = { command(NormsViewModel.NormsScreenCommand.SelectItem(it)) })
+                            onTrailingIconClick = { command(SelectItem(it)) })
                     }
                 }
             }
@@ -141,9 +166,12 @@ fun NormsScreenContent(modifier: Modifier = Modifier, uiState: NormsScreenUiStat
                 verticalArrangement = Arrangement.spacedBy(gridSpacing),
                 content = {
                     uiState.exercises.forEach { entry ->
-                        item(span = { GridItemSpan(maxLineSpan) }) { Header(text = stringResource(id = entry.key.humanizeNameRes)) }
+                        item(span = { GridItemSpan(maxLineSpan) }) {
+                            Header(text = stringResource(id = entry.key.humanizeNameRes))
+                        }
                         items(entry.value, key = { it.id }) { exercise ->
-                            val selected = exercise.exerciseType !in uiState.selectedExercises.map { it.exerciseType } || exercise in uiState.selectedExercises
+                            val selected = exercise.exerciseType !in uiState.selectedExercises.map { it.exerciseType } ||
+                                exercise in uiState.selectedExercises
                             ExerciseCard(
                                 modifier = Modifier
                                     .size(96.dp, 112.dp)
@@ -152,13 +180,17 @@ fun NormsScreenContent(modifier: Modifier = Modifier, uiState: NormsScreenUiStat
                                 onLongClick = {
                                     if (!selected) return@ExerciseCard
                                     if (!uiState.selectionMode) {
-                                        command(NormsViewModel.NormsScreenCommand.ChangeUiState(uiState.copy(selectionMode = true, selectedExercises = setOf(exercise))))
+                                        command(
+                                            ChangeUiState(
+                                                uiState.copy(selectionMode = true, selectedExercises = setOf(exercise))
+                                            )
+                                        )
                                     } else {
-                                        command(NormsViewModel.NormsScreenCommand.SelectItem(exercise))
+                                        command(SelectItem(exercise))
                                     }
                                 },
                                 onClick = {
-                                    if (uiState.selectionMode && selected) command(NormsViewModel.NormsScreenCommand.SelectItem(exercise))
+                                    if (uiState.selectionMode && selected) command(SelectItem(exercise))
                                 }
                             )
                         }
@@ -169,7 +201,7 @@ fun NormsScreenContent(modifier: Modifier = Modifier, uiState: NormsScreenUiStat
         if (uiState.selectedExercises.isNotEmpty()) {
             FloatingActionButton(modifier = Modifier
                 .align(Alignment.BottomEnd)
-                .padding(24.dp), onClick = { command(NormsViewModel.NormsScreenCommand.AddToComplex(uiState.selectedExercises)) }) {
+                .padding(24.dp), onClick = { command(AddToComplex(uiState.selectedExercises)) }) {
                 Icon(
                     imageVector = ImageVector.vectorResource(id = CoreUiR.drawable.ic_image_placeholder),
                     contentDescription = stringResource(R.string.add_to_complex)
@@ -179,7 +211,7 @@ fun NormsScreenContent(modifier: Modifier = Modifier, uiState: NormsScreenUiStat
     }
     if (uiState.filterDialogShow) {
         Dialog(
-            onDismissRequest = { command(NormsViewModel.NormsScreenCommand.ChangeUiState(uiState.copy(filterDialogShow = false))) },
+            onDismissRequest = { command(ChangeUiState(uiState.copy(filterDialogShow = false))) },
         ) {
             var filterState by remember {
                 mutableStateOf(uiState.filter)
@@ -189,7 +221,11 @@ fun NormsScreenContent(modifier: Modifier = Modifier, uiState: NormsScreenUiStat
                     .background(MaterialTheme.colorScheme.surface, shape = MaterialTheme.shapes.medium)
                     .padding(8.dp)
             ) {
-                Text(modifier = Modifier.fillMaxWidth(), text = stringResource(id = R.string.filter), textAlign = TextAlign.Center)
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = stringResource(id = R.string.filter),
+                    textAlign = TextAlign.Center
+                )
                 ExerciseType.availableValues.forEach { type ->
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Checkbox(checked = filterState.contains(type), onCheckedChange = { checked ->
@@ -214,7 +250,7 @@ fun NormsScreenContent(modifier: Modifier = Modifier, uiState: NormsScreenUiStat
                         modifier = Modifier.weight(1f),
                         onClick = {
                             command(
-                                NormsViewModel.NormsScreenCommand.ChangeUiState(
+                                ChangeUiState(
                                     uiState.copy(
                                         filterDialogShow = false,
                                         filter = filterState
@@ -305,7 +341,10 @@ fun NormsScreenPreview() {
             modifier = Modifier
                 .fillMaxSize(),
             gridSpacing = 8.dp,
-            uiState = NormsScreenUiState(exercises = exercises, selectedExercises = DomainDataHolder.exercises.map { it.toExerciseUi() }.take(2).toSet()),
+            uiState = NormsScreenUiState.EMPTY.copy(
+                exercises = exercises,
+                selectedExercises = DomainDataHolder.exercises.map { it.toExerciseUi() }.take(2).toSet()
+            ),
             command = {},
         )
     }

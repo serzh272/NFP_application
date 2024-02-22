@@ -7,10 +7,22 @@ import ru.serzh272.nfp.norms.model.ExerciseUi
 
 @Stable
 data class NormsScreenUiState(
-    val exercises: Map<ExerciseType, List<ExerciseUi>> = emptyMap(),
-    val selectionMode: Boolean = false,
-    val searchQuery: String = EMPTY_STRING,
-    val filterDialogShow: Boolean = false,
-    val filter: Set<ExerciseType> = emptySet(),
-    val selectedExercises: Set<ExerciseUi> = emptySet(),
-)
+    val exercises: Map<ExerciseType, List<ExerciseUi>>,
+    val selectionMode: Boolean,
+    val searchQuery: String,
+    val filterDialogShow: Boolean,
+    val filter: Set<ExerciseType>,
+    val selectedExercises: Set<ExerciseUi>,
+) {
+    companion object {
+
+        val EMPTY = NormsScreenUiState(
+            exercises = emptyMap(),
+            selectionMode = false,
+            searchQuery = EMPTY_STRING,
+            filterDialogShow = false,
+            filter = emptySet(),
+            selectedExercises = emptySet()
+        )
+    }
+}
