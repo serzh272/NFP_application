@@ -4,6 +4,7 @@ kotlin = "1.9.22"
 ksp="1.9.22-1.0.17"
 hilt = "2.48"
 composeUiVersion = "1.6.1"
+composeMaterial3Version = "1.2.0"
 composeCompiler = "1.5.9"
 roomVersion = "2.6.1"
 junit = "4.13.2"
@@ -40,7 +41,8 @@ junitUi = { group = "androidx.compose.ui", name = "ui-test-junit4", version.ref 
 debugComposeUiTooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "composeUiVersion" }
 debugComposeUiTestManifest = { group = "androidx.compose.ui", name = "ui-test-manifest", version.ref = "composeUiVersion" }
 activityCompose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
-composeMaterial = { group = "androidx.compose.material", name = "material", version.ref = "composeUiVersion" }
+composeMaterial = { group = "androidx.compose.material3", name = "material3", version.ref = "composeMaterial3Version" }
+composeWindowSize = { group = "androidx.compose.material3", name = "material3-window-size-class", version.ref = "composeMaterial3Version" }
 composeNavigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation" }
 accompanistFlowLayout = { group = "com.google.accompanist", name = "accompanist-flowlayout", version.ref = "flowlayout" }
 

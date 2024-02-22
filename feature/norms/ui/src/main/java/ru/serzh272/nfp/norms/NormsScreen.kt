@@ -3,20 +3,47 @@ package ru.serzh272.nfp.norms
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.InputChip
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
@@ -36,7 +63,6 @@ import ru.serzh272.nfp.norms.model.ExerciseUi
 import ru.serzh272.nfp.norms.model.ExerciseUi.Companion.toExerciseUi
 import ru.serzh272.nfp.norms.ui.R
 import ru.serzh272.nfp.theme.NFPTheme
-import ru.serzh272.nfp.core.theme.R as ThemeR
 import ru.serzh272.nfp.core.ui.R as CoreUiR
 
 @Composable
@@ -85,7 +111,7 @@ fun NormsScreenContent(modifier: Modifier = Modifier, uiState: NormsScreenUiStat
                     Icon(
                         imageVector = ImageVector.vectorResource(id = CoreUiR.drawable.ic_filter),
                         contentDescription = null,
-                        tint = if (isFilterApplied.value) MaterialTheme.colors.primary else colorResource(id = ThemeR.color.spanish_orange)
+                        tint = if (isFilterApplied.value) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.tertiary
                     )
                 }
             }
@@ -98,7 +124,7 @@ fun NormsScreenContent(modifier: Modifier = Modifier, uiState: NormsScreenUiStat
                     Surface(
                         modifier = Modifier
                             .wrapContentSize()
-                            .height(40.dp), color = MaterialTheme.colors.primary, shape = RoundedCornerShape(50)
+                            .height(40.dp), shape = RoundedCornerShape(50)
                     ) {
                         Chip(stringResource(id = CoreUiR.string.exercise, " ${it.id}"),
                             leadingIcon = ImageVector.vectorResource(id = it.iconRes ?: CoreUiR.drawable.ic_image_placeholder),
@@ -116,25 +142,24 @@ fun NormsScreenContent(modifier: Modifier = Modifier, uiState: NormsScreenUiStat
                 content = {
                     uiState.exercises.forEach { entry ->
                         item(span = { GridItemSpan(maxLineSpan) }) { Header(text = stringResource(id = entry.key.humanizeNameRes)) }
-                        items(entry.value, key = { it.id },) { exercise ->
+                        items(entry.value, key = { it.id }) { exercise ->
                             val selected = exercise.exerciseType !in uiState.selectedExercises.map { it.exerciseType } || exercise in uiState.selectedExercises
-                            val clickableColor = if (exercise in uiState.selectedExercises) MaterialTheme.colors.secondary else MaterialTheme.colors.secondaryVariant
                             ExerciseCard(
                                 modifier = Modifier
                                     .size(96.dp, 112.dp)
-                                    .combinedClickable(onLongClick = {
-                                        if (!selected) return@combinedClickable
-                                        if (!uiState.selectionMode) {
-                                            command(NormsViewModel.NormsScreenCommand.ChangeUiState(uiState.copy(selectionMode = true, selectedExercises = setOf(exercise))))
-                                        } else {
-                                            command(NormsViewModel.NormsScreenCommand.SelectItem(exercise))
-                                        }
-                                    }) {
-                                        if (uiState.selectionMode && selected) command(NormsViewModel.NormsScreenCommand.SelectItem(exercise))
-                                    }
                                     .animateItemPlacement(),
                                 exercise = exercise,
-                                backgroundColor = if (selected) clickableColor else colorResource(id = ThemeR.color.silver_sand)
+                                onLongClick = {
+                                    if (!selected) return@ExerciseCard
+                                    if (!uiState.selectionMode) {
+                                        command(NormsViewModel.NormsScreenCommand.ChangeUiState(uiState.copy(selectionMode = true, selectedExercises = setOf(exercise))))
+                                    } else {
+                                        command(NormsViewModel.NormsScreenCommand.SelectItem(exercise))
+                                    }
+                                },
+                                onClick = {
+                                    if (uiState.selectionMode && selected) command(NormsViewModel.NormsScreenCommand.SelectItem(exercise))
+                                }
                             )
                         }
                     }
@@ -147,8 +172,7 @@ fun NormsScreenContent(modifier: Modifier = Modifier, uiState: NormsScreenUiStat
                 .padding(24.dp), onClick = { command(NormsViewModel.NormsScreenCommand.AddToComplex(uiState.selectedExercises)) }) {
                 Icon(
                     imageVector = ImageVector.vectorResource(id = CoreUiR.drawable.ic_image_placeholder),
-                    contentDescription = stringResource(R.string.add_to_complex),
-                    tint = MaterialTheme.colors.onPrimary
+                    contentDescription = stringResource(R.string.add_to_complex)
                 )
             }
         }
@@ -157,16 +181,19 @@ fun NormsScreenContent(modifier: Modifier = Modifier, uiState: NormsScreenUiStat
         Dialog(
             onDismissRequest = { command(NormsViewModel.NormsScreenCommand.ChangeUiState(uiState.copy(filterDialogShow = false))) },
         ) {
+            var filterState by remember {
+                mutableStateOf(uiState.filter)
+            }
             Column(
                 modifier = Modifier
-                    .background(MaterialTheme.colors.surface, shape = MaterialTheme.shapes.medium)
+                    .background(MaterialTheme.colorScheme.surface, shape = MaterialTheme.shapes.medium)
                     .padding(8.dp)
             ) {
                 Text(modifier = Modifier.fillMaxWidth(), text = stringResource(id = R.string.filter), textAlign = TextAlign.Center)
                 ExerciseType.availableValues.forEach { type ->
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Checkbox(checked = uiState.filter.contains(type), onCheckedChange = { checked ->
-                            command(NormsViewModel.NormsScreenCommand.ChangeUiState(uiState.copy(filter = if (checked) uiState.filter + type else uiState.filter - type)))
+                        Checkbox(checked = filterState.contains(type), onCheckedChange = { checked ->
+                            filterState = if (checked) filterState + type else filterState - type
                         })
                         Text(text = stringResource(id = type.humanizeNameRes))
                     }
@@ -179,11 +206,23 @@ fun NormsScreenContent(modifier: Modifier = Modifier, uiState: NormsScreenUiStat
                 ) {
                     Button(modifier = Modifier.weight(1f),
                         colors = ButtonDefaults.buttonColors(
-                            backgroundColor = MaterialTheme.colors.secondary
-                        ), onClick = { command(NormsViewModel.NormsScreenCommand.ChangeUiState(uiState.copy(filter = emptySet()))) }) {
+                            containerColor = MaterialTheme.colorScheme.secondary
+                        ), onClick = { filterState = emptySet() }) {
                         Text(text = stringResource(R.string.clear))
                     }
-                    Button(modifier = Modifier.weight(1f), onClick = { command(NormsViewModel.NormsScreenCommand.ChangeUiState(uiState.copy(filterDialogShow = false))) }) {
+                    Button(
+                        modifier = Modifier.weight(1f),
+                        onClick = {
+                            command(
+                                NormsViewModel.NormsScreenCommand.ChangeUiState(
+                                    uiState.copy(
+                                        filterDialogShow = false,
+                                        filter = filterState
+                                    )
+                                )
+                            )
+                        }
+                    ) {
                         Text(text = stringResource(R.string.apply))
                     }
                 }
@@ -199,29 +238,42 @@ private fun Chip(
     trailingIcon: ImageVector,
     onTrailingIconClick: () -> Unit
 ) {
-    Row(
+    InputChip(
         modifier = Modifier
             .padding(horizontal = 8.dp)
-            .wrapContentSize(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)
-    ) {
-        Icon(modifier = Modifier.size(18.dp), imageVector = leadingIcon, contentDescription = EMPTY_STRING)
-        Text(text = text, fontSize = 12.sp)
-        IconButton(modifier = Modifier.size(18.dp), onClick = { onTrailingIconClick() }) {
-            Icon(imageVector = trailingIcon, contentDescription = EMPTY_STRING)
+            .wrapContentSize(),
+        selected = true,
+        onClick = onTrailingIconClick,
+        label = { Text(text = text, fontSize = 12.sp) },
+        trailingIcon = {
+            Icon(modifier = Modifier.size(12.dp), imageVector = trailingIcon, contentDescription = EMPTY_STRING)
+        },
+        leadingIcon = {
+            Icon(modifier = Modifier.size(18.dp), imageVector = leadingIcon, contentDescription = EMPTY_STRING)
         }
-    }
+    )
 }
 
 @Composable
 fun Header(modifier: Modifier = Modifier, text: String) {
-    Text(text = text, modifier = Modifier.fillMaxWidth())
+    Text(text = text, modifier = modifier.fillMaxWidth())
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ExerciseCard(modifier: Modifier = Modifier, exercise: ExerciseUi, backgroundColor: Color) {
+fun ExerciseCard(
+    modifier: Modifier = Modifier,
+    exercise: ExerciseUi,
+    onLongClick: () -> Unit,
+    onClick: () -> Unit
+) {
     Card(
-        modifier = modifier,
-        backgroundColor = backgroundColor
+        modifier = modifier
+            .clip(CardDefaults.outlinedShape)
+            .combinedClickable(
+                onLongClick = onLongClick,
+                onClick = onClick
+            ),
     ) {
         Column(Modifier.fillMaxSize()) {
             Icon(
@@ -231,12 +283,11 @@ fun ExerciseCard(modifier: Modifier = Modifier, exercise: ExerciseUi, background
                     .padding(start = 4.dp, top = 4.dp, end = 4.dp),
                 imageVector = ImageVector.vectorResource(id = exercise.iconRes ?: CoreUiR.drawable.ic_image_placeholder),
                 contentDescription = "",
-                tint = MaterialTheme.colors.primary
             )
             Text(
                 modifier = Modifier.padding(horizontal = 4.dp),
                 text = exercise.name,
-                fontSize = 12.sp,
+                style = MaterialTheme.typography.labelSmall,
                 textAlign = TextAlign.Center,
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 4

@@ -1,24 +1,27 @@
 package ru.serzh272.nfp.presentation
 
 import android.Manifest
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.BottomNavigation
-import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalInspectionMode
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,7 +37,6 @@ import ru.serzh272.nfp.presentation.component.MainViewModel
 import ru.serzh272.nfp.presentation.component.RootNavHost
 import ru.serzh272.nfp.presentation.component.RootNavigation
 import ru.serzh272.nfp.theme.NFPTheme
-import ru.serzh272.nfp.core.theme.R as ThemeR
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -47,7 +49,10 @@ class MainActivity : ComponentActivity() {
         RootNavigation.Help
     )
 
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         setContent {
             NFPTheme {
@@ -59,15 +64,14 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     fun MainScreen(viewModel: IMainViewModel, navigationItems: List<RootNavigation>) {
-        val scaffoldState = rememberScaffoldState()
         val navController = rememberNavController()
-        Scaffold(scaffoldState = scaffoldState,
+        Scaffold(
             bottomBar = {
-                BottomNavigation {
+                NavigationBar {
                     val navBackStackEntry by navController.currentBackStackEntryAsState()
                     val currentDestination = navBackStackEntry?.destination
                     navigationItems.forEach { screen ->
-                        BottomNavigationItem(
+                        NavigationBarItem(
                             selected = if (LocalInspectionMode.current) navigationItems.indexOf(screen) == 0 else currentDestination?.hierarchy?.any { it.route == screen.route } == true,
                             onClick = {
                                 handleTopLevelNavigation(navController, screen)
@@ -84,9 +88,10 @@ class MainActivity : ComponentActivity() {
                                     fontSize = 10.sp
                                 )
                             },
-                            selectedContentColor = MaterialTheme.colors.primary,
-                            unselectedContentColor = colorResource(
-                                id = ThemeR.color.silver_sand
+                            colors = NavigationBarItemDefaults.colors().copy(
+                                selectedIndicatorColor = Color.Transparent,
+                                selectedIconColor = MaterialTheme.colorScheme.primary,
+                                selectedTextColor = MaterialTheme.colorScheme.primary
                             )
                         )
                     }
