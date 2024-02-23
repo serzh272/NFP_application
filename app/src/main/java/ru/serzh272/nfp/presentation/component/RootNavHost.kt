@@ -16,6 +16,7 @@ import ru.serzh272.nfp.presentation.component.RootNavigation.Companion.HELP_ROUT
 import ru.serzh272.nfp.presentation.component.RootNavigation.Companion.NORMS_ROUTE
 import ru.serzh272.nfp.presentation.component.RootNavigation.Companion.PROFILE_ROUTE
 import ru.serzh272.nfp.presentation.component.RootNavigation.Companion.RESULTS_ROUTE
+import ru.serzh272.nfp.presentation.results.ResultsViewModel
 import ru.serzh272.nfp.profile.ProfileScreen
 import ru.serzh272.nfp.results.ResultsScreen
 
@@ -36,7 +37,13 @@ fun RootNavHost(
             )
         }
         composable(RESULTS_ROUTE) {
-            ResultsScreen(modifier = Modifier.fillMaxSize(), hiltViewModel())
+            val viewModel: ResultsViewModel = hiltViewModel()
+            val uiState by viewModel.resultsUiState.collectAsState()
+            ResultsScreen(
+                modifier = Modifier.fillMaxSize(),
+                uiState = uiState,
+                command = viewModel::handleCommand
+            )
         }
         composable(PROFILE_ROUTE) {
             ProfileScreen(modifier = Modifier.fillMaxSize(), hiltViewModel())

@@ -14,15 +14,12 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import ru.serzh272.nfp.model.DomainDataHolder
 import ru.serzh272.nfp.model.Exam
 import ru.serzh272.nfp.model.ExerciseWithResult
@@ -31,10 +28,13 @@ import ru.serzh272.nfp.theme.NFPTheme
 import ru.serzh272.nfp.ui.custom.PointsIndicator
 
 @Composable
-fun ResultsScreen(modifier: Modifier = Modifier, viewModel: ResultsViewModel = viewModel()) {
-    val uiState by viewModel.resultsUiState.collectAsState()
+fun ResultsScreen(
+    modifier: Modifier = Modifier,
+    uiState:  ResultsScreenUiState,
+    command: (ResultsViewModel.ResultsScreenCommand) -> Unit
+) {
 
-    ResultsScreenContent(modifier, uiState, viewModel::handleCommand)
+    ResultsScreenContent(modifier, uiState, command)
 }
 
 @Composable
