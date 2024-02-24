@@ -3,8 +3,10 @@ package ru.serzh272.nfp.profile
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.receiveAsFlow
 import ru.serzh272.common.constants.EMPTY_STRING
 import ru.serzh272.nfp.profile.model.UserFullInfo
 import ru.serzh272.nfp.profile.usecase.GetProfileUseCase
@@ -16,6 +18,9 @@ class ProfileViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     profileUseCase: GetProfileUseCase,
 ) : BaseViewModel<ProfileViewModel.ViewState, ProfileViewModel.Action>(ViewState()) {
+
+    private val _event = Channel<Event>()
+    val eventFlow = _event.receiveAsFlow()
 
     init {
         profileUseCase().onEach { userInfo ->
@@ -37,12 +42,7 @@ class ProfileViewModel @Inject constructor(
         class SetUserData(val data: UserFullInfo) : Action
     }
 
-    fun handleCommand(command: ProfileScreenCommand){
-        TODO()
-    }
-
-    sealed class ProfileScreenCommand{
-    }
+    sealed interface Event
 
     override fun onStateChanged(action: Action): ViewState {
         return when(action) {

@@ -4,26 +4,21 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
 import ru.serzh272.nfp.theme.NFPTheme
 
 @Composable
-fun ProfileScreen(modifier: Modifier = Modifier, viewModel: ProfileViewModel = viewModel()) {
-    val uiState by viewModel.stateFlow.collectAsState()
-
-    ProfileScreenContent(modifier, uiState, viewModel::handleCommand)
-}
-
-@Composable
-fun ProfileScreenContent(modifier: Modifier = Modifier, uiState: ProfileViewModel.ViewState, command: (ProfileViewModel.ProfileScreenCommand) -> Unit) {
-
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+fun ProfileScreen(
+    modifier: Modifier = Modifier,
+    uiState: ProfileViewModel.ViewState = ProfileViewModel.ViewState(),
+    onAction: (ProfileViewModel.Action) -> Unit) {
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         Text(text = uiState.userInfo.toString())
     }
 }
@@ -32,11 +27,11 @@ fun ProfileScreenContent(modifier: Modifier = Modifier, uiState: ProfileViewMode
 @Composable
 fun NProfileScreenPreview() {
     NFPTheme {
-        ProfileScreenContent(
+        ProfileScreen(
             modifier = Modifier
                 .fillMaxSize(),
             uiState = ProfileViewModel.ViewState(),
-            command = {},
+            onAction = { },
         )
     }
 }

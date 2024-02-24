@@ -18,6 +18,7 @@ import ru.serzh272.nfp.presentation.component.RootNavigation.Companion.PROFILE_R
 import ru.serzh272.nfp.presentation.component.RootNavigation.Companion.RESULTS_ROUTE
 import ru.serzh272.nfp.presentation.results.ResultsViewModel
 import ru.serzh272.nfp.profile.ProfileScreen
+import ru.serzh272.nfp.profile.ProfileViewModel
 import ru.serzh272.nfp.results.ResultsScreen
 
 @Composable
@@ -46,7 +47,9 @@ fun RootNavHost(
             )
         }
         composable(PROFILE_ROUTE) {
-            ProfileScreen(modifier = Modifier.fillMaxSize(), hiltViewModel())
+            val viewModel: ProfileViewModel = hiltViewModel()
+            val uiState: ProfileViewModel.ViewState by viewModel.stateFlow.collectAsState()
+            ProfileScreen(modifier = Modifier.fillMaxSize(), uiState, viewModel::sendAction)
         }
         composable(HELP_ROUTE) {
             Text(text = "help")
