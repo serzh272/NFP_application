@@ -7,6 +7,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.launch
 import ru.serzh272.common.constants.EMPTY_STRING
 import ru.serzh272.nfp.profile.model.UserFullInfo
 import ru.serzh272.nfp.profile.usecase.GetProfileUseCase
@@ -19,13 +20,16 @@ class ProfileViewModel @Inject constructor(
     profileUseCase: GetProfileUseCase,
 ) : BaseViewModel<ProfileViewModel.ViewState, ProfileViewModel.Action>(ViewState()) {
 
-    private val _event = Channel<Event>()
+    private val _event = Channel<Event>(Channel.BUFFERED)
     val eventFlow = _event.receiveAsFlow()
 
     init {
         profileUseCase().onEach { userInfo ->
             sendAction(Action.SetUserData(userInfo))
         }.launchIn(viewModelScope)
+        viewModelScope.launch {
+            _event.send(Event.DataLoaded)
+        }
     }
 
     data class ViewState(
@@ -42,7 +46,9 @@ class ProfileViewModel @Inject constructor(
         class SetUserData(val data: UserFullInfo) : Action
     }
 
-    sealed interface Event
+    sealed interface Event {
+        data object DataLoaded : Event
+    }
 
     override fun onStateChanged(action: Action): ViewState {
         return when(action) {

@@ -15,9 +15,13 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -36,6 +40,7 @@ import ru.serzh272.nfp.presentation.component.IMainViewModel
 import ru.serzh272.nfp.presentation.component.MainViewModel
 import ru.serzh272.nfp.presentation.component.RootNavHost
 import ru.serzh272.nfp.presentation.component.RootNavigation
+import ru.serzh272.nfp.presentation.model.RootEvent
 import ru.serzh272.nfp.theme.NFPTheme
 
 @AndroidEntryPoint
@@ -65,6 +70,7 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun MainScreen(viewModel: IMainViewModel, navigationItems: List<RootNavigation>) {
         val navController = rememberNavController()
+        val snackbarHostState = remember { SnackbarHostState() }
         Scaffold(
             bottomBar = {
                 NavigationBar {
@@ -96,9 +102,25 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                 }
-            }
+            },
+            snackbarHost = {
+                SnackbarHost(
+                    hostState = snackbarHostState
+                ) {
+                    Snackbar(snackbarData = it)
+                }
+            },
         ) {
-            RootNavHost(Modifier.padding(it), navController = navController)
+            RootNavHost(
+                modifier = Modifier.padding(it),
+                navController = navController,
+                onEvent = { rootEvent ->
+                    when(rootEvent) {
+                        is RootEvent.ShowDialog -> TODO()
+                        is RootEvent.ShowMessage -> snackbarHostState.showSnackbar(rootEvent.message)
+                    }
+                }
+            )
         }
     }
 
