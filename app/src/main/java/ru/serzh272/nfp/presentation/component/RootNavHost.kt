@@ -34,12 +34,17 @@ fun RootNavHost(
     NavHost(modifier = modifier, navController = navController, startDestination = startDestination) {
         composable(NORMS_ROUTE) {
             val viewModel: NormsViewModel = hiltViewModel()
-            val uiState by viewModel.normsUiState.collectAsState()
+            val uiState by viewModel.stateFlow.collectAsState()
             NormsScreen(
                 modifier = Modifier.fillMaxSize(),
                 uiState = uiState,
-                command = viewModel::handleCommand
+                onAction = viewModel::sendAction
             )
+            SingleEventEffect(flow = viewModel.eventFlow, lifecycleState = Lifecycle.State.STARTED) { event ->
+                when(event) {
+                    is NormsViewModel.Event.AddToComplex -> onEvent(RootEvent.ShowMessage.Success("${event.exercises.size} exercises added to complex"))
+                }
+            }
         }
         composable(RESULTS_ROUTE) {
             val viewModel: ResultsViewModel = hiltViewModel()

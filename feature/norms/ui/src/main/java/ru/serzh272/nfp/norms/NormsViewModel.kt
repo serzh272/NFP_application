@@ -1,99 +1,119 @@
 package ru.serzh272.nfp.norms
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import ru.serzh272.common.constants.EMPTY_STRING
+import ru.serzh272.nfp.norms.model.ExerciseType
 import ru.serzh272.nfp.norms.model.ExerciseUi
 import ru.serzh272.nfp.norms.model.ExerciseUi.Companion.toExerciseUi
 import ru.serzh272.nfp.norms.usecase.GetExercisesUseCase
+import ru.serzh272.nfp.viewmodel.BaseViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class NormsViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     getExercisesUseCase: GetExercisesUseCase,
-) : ViewModel() {
+) : BaseViewModel<NormsViewModel.ViewState, NormsViewModel.Action>(ViewState.EMPTY) {
 
     private var allExercises: List<ExerciseUi> = listOf()
 
     private val exercisesFlow: Flow<List<ExerciseUi>> = getExercisesUseCase().map { exercises -> exercises.map { exercise -> exercise.toExerciseUi() } }
 
-    private val _normsUiState: MutableStateFlow<NormsScreenUiState> = MutableStateFlow(NormsScreenUiState.EMPTY)
-    val normsUiState: StateFlow<NormsScreenUiState> = _normsUiState
+    private val _event = Channel<Event>(Channel.BUFFERED)
+    val eventFlow = _event.receiveAsFlow()
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
             exercisesFlow.collect {
                 allExercises = it
-                val selectedExercises = normsUiState.value.selectedExercises.intersect(allExercises.toSet())
+                val selectedExercises = stateFlow.value.selectedExercises.intersect(allExercises.toSet())
                 val selectionMode = selectedExercises.isNotEmpty()
-                setUiState(normsUiState.value.copy(exercises = allExercises.groupBy { exercise -> exercise.exerciseType }, selectedExercises = selectedExercises, selectionMode = selectionMode))
+                val newState = stateFlow.value.copy(exercises = allExercises.groupBy { exercise -> exercise.exerciseType }, selectedExercises = selectedExercises, selectionMode = selectionMode)
+                sendAction(Action.ChangeUiState(newState))
             }
         }
     }
 
-    fun setUiState(state: NormsScreenUiState) {
-        val filtered = (if (state.searchQuery.isBlank()) allExercises else allExercises.filter {
+    fun ViewState.withGroupedExercises(): ViewState {
+        val filtered = (if (searchQuery.isBlank()) allExercises else allExercises.filter {
             it.name.contains(
-                state.searchQuery,
+                searchQuery,
                 true
             )
-        }).run { takeIf { state.filter.isEmpty() } ?: filter { state.filter.contains(it.exerciseType) } }
+        }).run { takeIf { filter.isEmpty() } ?: filter { filter.contains(it.exerciseType) } }
             .filter { exercise ->
-                exercise.exerciseType !in state.selectedExercises.map { it.exerciseType } ||
-                    exercise in state.selectedExercises
+                exercise.exerciseType !in selectedExercises.map { it.exerciseType } ||
+                    exercise in selectedExercises
             }
         val grouped = filtered.groupBy { it.exerciseType }
-        _normsUiState.value = state.copy(exercises = grouped)
+        return copy(exercises = grouped)
     }
 
-    private fun handleItemSelection(item: ExerciseUi) {
-        with(normsUiState.value) {
-            if (item in selectedExercises && selectedExercises.size == 1 || selectedExercises.isEmpty()) {
-                setUiState(copy(selectionMode = false, selectedExercises = emptySet()))
-            } else {
-                setUiState(
-                    copy(
-                        selectedExercises = if (item in selectedExercises) {
-                            selectedExercises - item
-                        } else {
-                            selectedExercises + item
-                        }
-                    )
-                )
+    private fun ViewState.withSelectedItem(item: ExerciseUi): ViewState {
+        return if (item in selectedExercises && selectedExercises.size == 1 || selectedExercises.isEmpty()) {
+            copy(selectionMode = false, selectedExercises = emptySet())
+        } else {
+            copy(
+                selectedExercises = if (item in selectedExercises) {
+                    selectedExercises - item
+                } else {
+                    selectedExercises + item
+                }
+            )
+        }
+    }
+
+    sealed interface Action : BaseAction {
+        data class ChangeUiState(val uiState: ViewState) : Action
+        data class SelectItem(val item: ExerciseUi) : Action
+        data class AddToComplex(val exercises: Set<ExerciseUi>) : Action
+    }
+
+    override fun onStateChanged(action: Action): ViewState {
+        return when (action) {
+            is Action.ChangeUiState -> action.uiState
+            is Action.SelectItem -> state.withSelectedItem(action.item)
+            is Action.AddToComplex -> {
+                viewModelScope.launch {
+                    _event.send(Event.AddToComplex(action.exercises))
+                }
+                ViewState.EMPTY.copy(exercises = allExercises.groupBy { it.exerciseType })
             }
+        }.withGroupedExercises()
+    }
+
+    data class ViewState(
+        val exercises: Map<ExerciseType, List<ExerciseUi>>,
+        val selectionMode: Boolean,
+        val searchQuery: String,
+        val filterDialogShow: Boolean,
+        val filter: Set<ExerciseType>,
+        val selectedExercises: Set<ExerciseUi>,
+    ) : BaseViewState {
+
+        companion object {
+
+            val EMPTY = ViewState(
+                exercises = emptyMap(),
+                selectionMode = false,
+                searchQuery = EMPTY_STRING,
+                filterDialogShow = false,
+                filter = emptySet(),
+                selectedExercises = emptySet()
+            )
         }
     }
 
-    fun handleCommand(command: NormsScreenCommand) {
-        when (command) {
-            is NormsScreenCommand.ChangeUiState -> setUiState(command.uiState)
-            is NormsScreenCommand.SelectItem -> handleItemSelection(command.item)
-            is NormsScreenCommand.AddToComplex -> handleAddToComplex(command.exercises)
-        }
-    }
-
-    private fun handleAddToComplex(exercises: Set<ExerciseUi>) {
-        _normsUiState.update { NormsScreenUiState.EMPTY.copy(exercises = allExercises.groupBy { it.exerciseType }) }
-    }
-
-    sealed class NormsScreenCommand {
-        data class ChangeUiState(val uiState: NormsScreenUiState) : NormsScreenCommand()
-        data class SelectItem(val item: ExerciseUi) : NormsScreenCommand()
-        data class AddToComplex(val exercises: Set<ExerciseUi>) : NormsScreenCommand()
-    }
-
-    override fun onCleared() {
-        Log.d("M_NormsViewModel", "cleared")
-        super.onCleared()
+    sealed interface Event {
+        class AddToComplex(val exercises: Set<ExerciseUi>) : Event
     }
 }

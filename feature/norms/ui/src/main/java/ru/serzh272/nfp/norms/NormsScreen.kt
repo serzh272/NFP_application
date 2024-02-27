@@ -56,9 +56,9 @@ import androidx.compose.ui.window.Dialog
 import com.google.accompanist.flowlayout.FlowRow
 import ru.serzh272.common.constants.EMPTY_STRING
 import ru.serzh272.nfp.model.DomainDataHolder
-import ru.serzh272.nfp.norms.NormsViewModel.NormsScreenCommand.AddToComplex
-import ru.serzh272.nfp.norms.NormsViewModel.NormsScreenCommand.ChangeUiState
-import ru.serzh272.nfp.norms.NormsViewModel.NormsScreenCommand.SelectItem
+import ru.serzh272.nfp.norms.NormsViewModel.Action.AddToComplex
+import ru.serzh272.nfp.norms.NormsViewModel.Action.ChangeUiState
+import ru.serzh272.nfp.norms.NormsViewModel.Action.SelectItem
 import ru.serzh272.nfp.norms.model.ExerciseType
 import ru.serzh272.nfp.norms.model.ExerciseUi
 import ru.serzh272.nfp.norms.model.ExerciseUi.Companion.toExerciseUi
@@ -66,23 +66,13 @@ import ru.serzh272.nfp.norms.ui.R
 import ru.serzh272.nfp.theme.NFPTheme
 import ru.serzh272.nfp.core.ui.R as CoreUiR
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun NormsScreen(
     modifier: Modifier = Modifier,
-    uiState: NormsScreenUiState = NormsScreenUiState.EMPTY,
+    uiState: NormsViewModel.ViewState = NormsViewModel.ViewState.EMPTY,
     gridSpacing: Dp = 8.dp,
-    command: (NormsViewModel.NormsScreenCommand) -> Unit = { }
-) {
-    NormsScreenContent(modifier, uiState, gridSpacing, command)
-}
-
-@OptIn(ExperimentalFoundationApi::class)
-@Composable
-fun NormsScreenContent(
-    modifier: Modifier = Modifier,
-    uiState: NormsScreenUiState,
-    gridSpacing: Dp,
-    command: (NormsViewModel.NormsScreenCommand) -> Unit
+    onAction: (NormsViewModel.Action) -> Unit = { }
 ) {
     val lazyGridState = rememberLazyGridState()
     val isFilterApplied = remember(uiState.filter) {
@@ -104,7 +94,7 @@ fun NormsScreenContent(
                     trailingIcon = if (uiState.searchQuery.isNotBlank()) {
                         {
                             IconButton(onClick = {
-                                command(
+                                onAction(
                                     ChangeUiState(
                                         uiState.copy(searchQuery = "")
                                     )
@@ -120,11 +110,11 @@ fun NormsScreenContent(
                     singleLine = true,
                     label = { Text(text = stringResource(id = R.string.search)) },
                     onValueChange = {
-                        command(ChangeUiState(uiState.copy(searchQuery = it)))
+                        onAction(ChangeUiState(uiState.copy(searchQuery = it)))
                     })
                 IconButton(
                     onClick = {
-                        command(ChangeUiState(uiState.copy(filterDialogShow = true)))
+                        onAction(ChangeUiState(uiState.copy(filterDialogShow = true)))
                     }
                 ) {
                     Icon(
@@ -154,7 +144,7 @@ fun NormsScreenContent(
                                 id = it.iconRes ?: CoreUiR.drawable.ic_image_placeholder
                             ),
                             trailingIcon = ImageVector.vectorResource(id = CoreUiR.drawable.ic_close_24),
-                            onTrailingIconClick = { command(SelectItem(it)) })
+                            onTrailingIconClick = { onAction(SelectItem(it)) })
                     }
                 }
             }
@@ -180,17 +170,17 @@ fun NormsScreenContent(
                                 onLongClick = {
                                     if (!selected) return@ExerciseCard
                                     if (!uiState.selectionMode) {
-                                        command(
+                                        onAction(
                                             ChangeUiState(
                                                 uiState.copy(selectionMode = true, selectedExercises = setOf(exercise))
                                             )
                                         )
                                     } else {
-                                        command(SelectItem(exercise))
+                                        onAction(SelectItem(exercise))
                                     }
                                 },
                                 onClick = {
-                                    if (uiState.selectionMode && selected) command(SelectItem(exercise))
+                                    if (uiState.selectionMode && selected) onAction(SelectItem(exercise))
                                 }
                             )
                         }
@@ -201,7 +191,7 @@ fun NormsScreenContent(
         if (uiState.selectedExercises.isNotEmpty()) {
             FloatingActionButton(modifier = Modifier
                 .align(Alignment.BottomEnd)
-                .padding(24.dp), onClick = { command(AddToComplex(uiState.selectedExercises)) }) {
+                .padding(24.dp), onClick = { onAction(AddToComplex(uiState.selectedExercises)) }) {
                 Icon(
                     imageVector = ImageVector.vectorResource(id = CoreUiR.drawable.ic_image_placeholder),
                     contentDescription = stringResource(R.string.add_to_complex)
@@ -211,7 +201,7 @@ fun NormsScreenContent(
     }
     if (uiState.filterDialogShow) {
         Dialog(
-            onDismissRequest = { command(ChangeUiState(uiState.copy(filterDialogShow = false))) },
+            onDismissRequest = { onAction(ChangeUiState(uiState.copy(filterDialogShow = false))) },
         ) {
             var filterState by remember {
                 mutableStateOf(uiState.filter)
@@ -249,7 +239,7 @@ fun NormsScreenContent(
                     Button(
                         modifier = Modifier.weight(1f),
                         onClick = {
-                            command(
+                            onAction(
                                 ChangeUiState(
                                     uiState.copy(
                                         filterDialogShow = false,
@@ -337,15 +327,15 @@ fun ExerciseCard(
 fun NormsScreenPreview() {
     NFPTheme {
         val exercises = DomainDataHolder.exercises.map { it.toExerciseUi() }.groupBy { it.exerciseType }
-        NormsScreenContent(
+        NormsScreen(
             modifier = Modifier
                 .fillMaxSize(),
             gridSpacing = 8.dp,
-            uiState = NormsScreenUiState.EMPTY.copy(
+            uiState = NormsViewModel.ViewState.EMPTY.copy(
                 exercises = exercises,
                 selectedExercises = DomainDataHolder.exercises.map { it.toExerciseUi() }.take(2).toSet()
             ),
-            command = {},
+            onAction = {},
         )
     }
 }

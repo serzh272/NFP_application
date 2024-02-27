@@ -1,9 +1,10 @@
 package ru.serzh272.nfp.data.mapper
 
 import ru.serzh272.nfp.data.local.database.entity.ExerciseEntity
+import ru.serzh272.nfp.model.ExerciseDomain
 
-fun ExerciseEntity.toExercise(): ru.serzh272.nfp.model.ExerciseDomain {
-    return ru.serzh272.nfp.model.ExerciseDomain(
+fun ExerciseEntity.toExercise(): ExerciseDomain {
+    return ExerciseDomain(
         id = id,
         name = exerciseName,
         description = description,
@@ -11,7 +12,7 @@ fun ExerciseEntity.toExercise(): ru.serzh272.nfp.model.ExerciseDomain {
     )
 }
 
-fun ru.serzh272.nfp.model.ExerciseDomain.toExerciseEntity(): ExerciseEntity {
+fun ExerciseDomain.toExerciseEntity(): ExerciseEntity {
     return ExerciseEntity(
         id = id,
         exerciseName = name,

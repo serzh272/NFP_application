@@ -3,7 +3,7 @@ package ru.serzh272.nfp.data.local.database
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import ru.serzh272.nfp.WeightConstraintEntity
+import ru.serzh272.nfp.data.local.database.entity.WeightConstraintEntity
 import ru.serzh272.nfp.data.local.database.converters.RoomDbConverter
 import ru.serzh272.nfp.data.local.database.dao.AgeGroupDao
 import ru.serzh272.nfp.data.local.database.dao.CategoryDao
@@ -14,24 +14,38 @@ import ru.serzh272.nfp.data.local.database.dao.MinPointsDao
 import ru.serzh272.nfp.data.local.database.dao.PointsDao
 import ru.serzh272.nfp.data.local.database.dao.UserCategoryDao
 import ru.serzh272.nfp.data.local.database.dao.UserDao
+import ru.serzh272.nfp.data.local.database.entity.AgeGroupEntity
+import ru.serzh272.nfp.data.local.database.entity.CategoryEntity
+import ru.serzh272.nfp.data.local.database.entity.CurrentUserEntity
+import ru.serzh272.nfp.data.local.database.entity.ExamEntity
+import ru.serzh272.nfp.data.local.database.entity.ExamExerciseXref
+import ru.serzh272.nfp.data.local.database.entity.ExerciseEntity
+import ru.serzh272.nfp.data.local.database.entity.GroupEntity
+import ru.serzh272.nfp.data.local.database.entity.MarkByPointsXref
+import ru.serzh272.nfp.data.local.database.entity.MarkEntity
+import ru.serzh272.nfp.data.local.database.entity.MinPointsEntity
+import ru.serzh272.nfp.data.local.database.entity.PointsEntity
+import ru.serzh272.nfp.data.local.database.entity.QualificationByPointsXref
+import ru.serzh272.nfp.data.local.database.entity.UserCategoryEntity
+import ru.serzh272.nfp.data.local.database.entity.UserEntity
 
 @Database(
     entities = [
-        ru.serzh272.nfp.data.local.database.entity.ExerciseEntity::class,
-        ru.serzh272.nfp.data.local.database.entity.ExamEntity::class,
-        ru.serzh272.nfp.data.local.database.entity.ExamExerciseXref::class,
-        ru.serzh272.nfp.data.local.database.entity.PointsEntity::class,
+        ExerciseEntity::class,
+        ExamEntity::class,
+        ExamExerciseXref::class,
+        PointsEntity::class,
         WeightConstraintEntity::class,
-        ru.serzh272.nfp.data.local.database.entity.AgeGroupEntity::class,
-        ru.serzh272.nfp.data.local.database.entity.CategoryEntity::class,
-        ru.serzh272.nfp.data.local.database.entity.GroupEntity::class,
-        ru.serzh272.nfp.data.local.database.entity.MarkByPointsXref::class,
-        ru.serzh272.nfp.data.local.database.entity.MarkEntity::class,
-        ru.serzh272.nfp.data.local.database.entity.QualificationByPointsXref::class,
-        ru.serzh272.nfp.data.local.database.entity.UserEntity::class,
-        ru.serzh272.nfp.data.local.database.entity.CurrentUserEntity::class,
-        ru.serzh272.nfp.data.local.database.entity.MinPointsEntity::class,
-        ru.serzh272.nfp.data.local.database.entity.UserCategoryEntity::class
+        AgeGroupEntity::class,
+        CategoryEntity::class,
+        GroupEntity::class,
+        MarkByPointsXref::class,
+        MarkEntity::class,
+        QualificationByPointsXref::class,
+        UserEntity::class,
+        CurrentUserEntity::class,
+        MinPointsEntity::class,
+        UserCategoryEntity::class
     ],
     version = RoomDb.DATABASE_VERSION
 )
