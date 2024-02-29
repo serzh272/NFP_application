@@ -8,9 +8,9 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import ru.serzh272.common.constants.EMPTY_STRING
+import ru.serzh272.nfp.norms.delegate.selectedIds
 import ru.serzh272.nfp.norms.model.ExerciseType
 import ru.serzh272.nfp.norms.model.ExerciseUi
 import ru.serzh272.nfp.norms.model.ExerciseUi.Companion.toExerciseUi
@@ -20,9 +20,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NormsViewModel @Inject constructor(
-    private val savedStateHandle: SavedStateHandle,
+    val savedStateHandle: SavedStateHandle,
     getExercisesUseCase: GetExercisesUseCase,
 ) : BaseViewModel<NormsViewModel.ViewState, NormsViewModel.Action>(ViewState.EMPTY) {
+
+    private var selectedIds by selectedIds()
 
     private var allExercises: List<ExerciseUi> = listOf()
 
@@ -35,9 +37,12 @@ class NormsViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             exercisesFlow.collect {
                 allExercises = it
-                val selectedExercises = stateFlow.value.selectedExercises.intersect(allExercises.toSet())
-                val selectionMode = selectedExercises.isNotEmpty()
-                val newState = stateFlow.value.copy(exercises = allExercises.groupBy { exercise -> exercise.exerciseType }, selectedExercises = selectedExercises, selectionMode = selectionMode)
+                //val selectedExercises = stateFlow.value.selectedExercises.intersect(allExercises.toSet())
+                val newState = stateFlow.value.copy(
+                    exercises = allExercises.groupBy { exercise -> exercise.exerciseType },
+                    selectedExercises = allExercises.filter { exercise -> exercise.id in selectedIds }.toSet(),
+                )
+                selectedIds = emptySet()
                 sendAction(Action.ChangeUiState(newState))
             }
         }
@@ -58,9 +63,9 @@ class NormsViewModel @Inject constructor(
         return copy(exercises = grouped)
     }
 
-    private fun ViewState.withSelectedItem(item: ExerciseUi): ViewState {
+    private fun ViewState.switchItemSelection(item: ExerciseUi): ViewState {
         return if (item in selectedExercises && selectedExercises.size == 1 || selectedExercises.isEmpty()) {
-            copy(selectionMode = false, selectedExercises = emptySet())
+            copy(selectedExercises = emptySet())
         } else {
             copy(
                 selectedExercises = if (item in selectedExercises) {
@@ -74,37 +79,38 @@ class NormsViewModel @Inject constructor(
 
     sealed interface Action : BaseAction {
         data class ChangeUiState(val uiState: ViewState) : Action
-        data class SelectItem(val item: ExerciseUi) : Action
+        data class SwitchItemSelection(val item: ExerciseUi) : Action
         data class AddToComplex(val exercises: Set<ExerciseUi>) : Action
     }
 
     override fun onStateChanged(action: Action): ViewState {
         return when (action) {
             is Action.ChangeUiState -> action.uiState
-            is Action.SelectItem -> state.withSelectedItem(action.item)
+            is Action.SwitchItemSelection -> state.switchItemSelection(action.item)
             is Action.AddToComplex -> {
                 viewModelScope.launch {
                     _event.send(Event.AddToComplex(action.exercises))
                 }
                 ViewState.EMPTY.copy(exercises = allExercises.groupBy { it.exerciseType })
             }
-        }.withGroupedExercises()
+        }.also { selectedIds = it.selectedExercises.map { ex -> ex.id }.toSet() }.withGroupedExercises()
     }
 
     data class ViewState(
         val exercises: Map<ExerciseType, List<ExerciseUi>>,
-        val selectionMode: Boolean,
         val searchQuery: String,
         val filterDialogShow: Boolean,
         val filter: Set<ExerciseType>,
         val selectedExercises: Set<ExerciseUi>,
     ) : BaseViewState {
 
+        val selectionMode: Boolean
+            get() = selectedExercises.isNotEmpty()
+
         companion object {
 
             val EMPTY = ViewState(
                 exercises = emptyMap(),
-                selectionMode = false,
                 searchQuery = EMPTY_STRING,
                 filterDialogShow = false,
                 filter = emptySet(),

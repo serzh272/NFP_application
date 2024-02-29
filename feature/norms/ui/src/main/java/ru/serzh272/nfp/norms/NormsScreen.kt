@@ -58,7 +58,7 @@ import ru.serzh272.common.constants.EMPTY_STRING
 import ru.serzh272.nfp.model.DomainDataHolder
 import ru.serzh272.nfp.norms.NormsViewModel.Action.AddToComplex
 import ru.serzh272.nfp.norms.NormsViewModel.Action.ChangeUiState
-import ru.serzh272.nfp.norms.NormsViewModel.Action.SelectItem
+import ru.serzh272.nfp.norms.NormsViewModel.Action.SwitchItemSelection
 import ru.serzh272.nfp.norms.model.ExerciseType
 import ru.serzh272.nfp.norms.model.ExerciseUi
 import ru.serzh272.nfp.norms.model.ExerciseUi.Companion.toExerciseUi
@@ -144,7 +144,7 @@ fun NormsScreen(
                                 id = it.iconRes ?: CoreUiR.drawable.ic_image_placeholder
                             ),
                             trailingIcon = ImageVector.vectorResource(id = CoreUiR.drawable.ic_close_24),
-                            onTrailingIconClick = { onAction(SelectItem(it)) })
+                            onTrailingIconClick = { onAction(SwitchItemSelection(it)) })
                     }
                 }
             }
@@ -172,15 +172,15 @@ fun NormsScreen(
                                     if (!uiState.selectionMode) {
                                         onAction(
                                             ChangeUiState(
-                                                uiState.copy(selectionMode = true, selectedExercises = setOf(exercise))
+                                                uiState.copy(selectedExercises = setOf(exercise))
                                             )
                                         )
                                     } else {
-                                        onAction(SelectItem(exercise))
+                                        onAction(SwitchItemSelection(exercise))
                                     }
                                 },
                                 onClick = {
-                                    if (uiState.selectionMode && selected) onAction(SelectItem(exercise))
+                                    if (uiState.selectionMode && selected) onAction(SwitchItemSelection(exercise))
                                 }
                             )
                         }
